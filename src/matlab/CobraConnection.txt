@@ -1,0 +1,367 @@
+.PROGRAM test832()
+
+;-------------------------------------------------------------------------
+; Remote control
+; This server program is used for recieving alter command instructions from a Matlab client application
+; Start up the server program in task 0 from AdeptDesktop and run the Matlab client application 
+; to send Alter command instructions
+; The Ip address of the Smartcontroller in the workshop is "10.10.77.165" and 
+; local server port number is set to 1234
+; 
+;-------------------------------------------------------------------------
+        AUTO do_wait, handle, lun, no_wait, repeat_loop, status
+        AUTO $in.str, $out.str, $go.str, $coords.str, $crap.str
+;-------------------------------------------------------------------------
+        TYPE "==============================================="
+        TYPE "TCP/IP SERVER SCRIPT FOR EXTERNAL COMMUNICATION"
+        TYPE "- Read AdeptNet User's Guide (PDF) for examples"
+        TYPE "==============================================="
+;-------------------------------------------------------------------------
+        TYPE "Initializing server parameters ..."
+
+        ; ******************************************** ;
+        ; HOME POS (check manually before using)
+        SET #start = #PPOINT(-11,100,50,-1)
+
+        ; ******************************************** ;
+        ; GOTO tag
+   100  
+        ; ******************************************** ;
+        ; Initialize constants.
+        no_wait = 1
+        do_wait = 0
+        lun = 7
+        first_time_conn = TRUE
+
+        ; ******************************************** ;
+        ; Physical parameter control
+        TYPE "Setting default robot acceleration and speed"
+        ACCEL 10, 10
+        SPEED 40
+        SPEED 40 MONITOR
+
+        ; ******************************************** ;
+        ; Error handling
+        ;REACTE error.trap
+
+        ; ******************************************** ;
+        ; Define out.str value
+        $out.str = "Server Ready"
+        $go.str = "GoGo"
+
+        ; ******************************************** ;
+        ; Attach robot to task no input args mean default which is robot nr 1
+        TYPE "Attaching robot"
+        ATTACH ()
+
+        ; ******************************************** ;
+        ; Attach the TCP device (mode=4 means allocate next available LUN).
+        $srv_ip = "192 168 1 180"
+        $srv_port = "1234"
+
+        TYPE "Starting TCP/IP server at"
+        TYPE "- IP: ", $srv_ip
+        TYPE "- Port: ", $srv_port
+
+        ATTACH (lun, 4) "TCP"
+        FSET (lun) "/NODE 'server' /ADDRESS ", $srv_ip
+        status = IOSTAT(lun) ;Check status of ATTACH
+        IF status < 0 THEN
+            TYPE "Error from ATTACH:", $ERROR(status)
+            GOTO 100
+        END
+
+        ; Set up a socket with local port #1234, to accept 5 client
+        ; connections, with a buffer size of 1024 bytes.
+        FOPEN (lun, 16) "/LOCAL_PORT ", $srv_port, " /CLIENTS 5 /BUFFER_SIZE 20480"
+        status = IOSTAT(lun) ;Check status of ATTACH
+        IF status < 0 THEN
+            TYPE "Error from FOPEN:", $ERROR(status)
+            GOTO 100
+        END
+        ; ******************************************** ;
+        ; ******************************************** ;
+        TYPE "Initialization done"
+        TYPE "==============================================="
+        TYPE "READY FOR CONNECTIONS"
+        ; ******************************************** ;
+        ; ******************************************** ;
+
+        ; Control loop starts
+        repeat_loop = TRUE
+        WHILE repeat_loop DO
+            WAIT
+            TYPE "==============================================="
+
+            ; READ INCOMING DATA
+            READ (lun, handle, do_wait) $coords.str
+
+            ; Check status of connection
+            status = IOSTAT(lun)
+            CASE status OF
+              VALUE 1: ; RECEIVED MESSAGE
+                TYPE "INFO: Succesfully received message"
+              VALUE 100: ; NEW CONNECTION OPENED
+                TYPE "INFO: Client with handle", handle, " connected"
+              VALUE 101: ; CONNECTION CLOSED
+                TYPE "INFO: Client with handle", handle, " disconnected"
+              ANY
+                TYPE "WARNING: Error during read: ", $ERROR(status)
+            END
+
+            ; MAKE COPY OF STRING FOR LATER TESTING OF NEW MATLAB SCRIPT
+            ; LOOK FURTHER DOWN IN THIS FILE
+            $received_string = $coords.str
+
+            ; PRINT THE RECEIVED STRING
+            TYPE "Raw message received from MATLAB: ", $coords.str
+
+            ; LOOP THE RECEIVED STRING AND SPLIT IT BY COMMAS
+            ; NOTE! $DECODE deletes the characters from the original string
+
+            ; Extract coordinates:
+
+            $trash = $DECODE($coords.str,"[",-2) ; Remove command and bracket
+            $newcoords = $DECODE($coords.str,"]",0) ; Remove closing bracket
+
+            i = 0
+            DO
+                $temp = $DECODE($newcoords,",",0) ; Pick off a number string
+                value[i] = VAL($temp) ; parse to real value in array index nr i
+                $temp = $DECODE($newcoords,",",1)     ; Discard commas 
+                i = i+1                             ;Advance the array index
+            UNTIL i == 7
+
+
+            ; SAVE EACH ENTRY FROM value ARRAY TO DIFFERENT VARIABLES
+            my_value = value[0]
+            my_x = value[0]
+            my_y = value[1]
+            my_z = value[2]
+            my_wx = value[3]
+            my_wy = value[4]
+            my_wz = value[5]
+            speed = value[6]
+            ;my_approach = value[7]
+            ;my_depart = value[8]
+
+            ; PRINT VALUES TO MONITOR/TERMINAL FOR DEBUGGING
+            ;TYPE "Tag::", my_value
+            TYPE "x/J1", my_x
+            TYPE "y/J2", my_y
+            TYPE "z/J3", my_z
+            TYPE "yaw/J4", my_wx
+            TYPE "pitch/J5", my_wy
+            TYPE "Roll/J6", my_wz
+            TYPE "Speed", speed
+            ;TYPE "Approach", my_approach
+            ;TYPE "Depart", my_depart
+
+;                SET vbai_loc = TRANS(my_x,my_y,my_z,my_wx,my_wy,my_wz)
+
+            ; ---------------------------------------
+            ; Using if-else-loop to verify that the string 
+            ; is either world-coordinates or joint-angle.
+
+
+            ; ******************************************** ;
+            ; TEST WITH NEW MATLAB SCRIPT FROM FANUC ROBOT ;
+            ; ******************************************** ;
+
+            TYPE "Received message: ", $received_string
+            $parsed.str = $DECODE($received_string,";",0)
+            TYPE "Parsed message: ", $parsed.str
+
+            ; ******************************************** ;
+            ; ************** OPEN GRIPPER **************** ;
+            ; ******************************************** ;
+
+            ; TYPE STRDIF($parsed.str,"GRABOFF") ; for debugging
+            IF STRDIF($parsed.str,"GRABOFF") == 0 THEN     ; 0 = strings are identical byte by byte
+                TYPE "** OPEN GRIPPER **"
+                SIGNAL -3001, 3002
+            END
+
+            ; ******************************************** ;
+            ; ************** CLOSE GRIPPER *************** ;
+            ; ******************************************** ;
+
+            IF STRDIF($parsed.str,"GRABON") == 0 THEN     ; 0 = strings are identical byte by byte
+                TYPE "** CLOSE GRIPPER **"
+                SIGNAL 3001, -3002
+            END
+
+            ; ******************************************** ;
+            ; **************** MOVE LINEAR *************** ;
+            ; ******************************************** ;
+
+            IF STRDIF($parsed.str,"MOVEL") == 0 THEN ; 0 = strings are identical byte by byte
+                TYPE "** MOVE LINEAR **"
+                WRITE (lun, handle) "MOVEL;started; "
+                SPEED speed
+                SET goal_pos = TRANS(my_x,my_y,my_z,my_wx,my_wy,my_wz)
+                MOVE goal_pos
+
+                BREAK
+                WRITE (lun, handle) "MOVEL;ended; "
+            END
+
+            ; ******************************************** ;
+            ; **************** MOVE JOINT *************** ;
+            ; ******************************************** ;
+
+            IF STRDIF($parsed.str,"MOVEJ") == 0 THEN ; 0 = strings are identical byte by byte
+                TYPE "** MOVE JOINT **"
+                WRITE (lun, handle) "MOVEJ;started; "
+                SPEED speed
+                SET #goal_joint = #PPOINT(my_x,my_y,my_z,my_wx,my_wy,my_wz)
+                MOVE #goal_joint
+
+                BREAK
+                WRITE (lun, handle) "MOVEJ;ended; "
+            END
+
+            ; ******************************************** ;
+            ; *********** MOVE LINEAR RELATIVE *********** ;
+            ; ******************************************** ;
+
+            IF STRDIF($parsed.str,"MOVELR") == 0 THEN ; 0 = strings are identical byte by byte
+                TYPE "** MOVE LINEAR RELATIVE **"
+                WRITE (lun, handle) "MOVELR;started; "
+                SPEED speed
+
+                HERE curr_robot_pos
+                DECOMPOSE currentpos[] = curr_robot_pos
+
+                MOVE TRANS(my_x+currentpos[0],my_y+currentpos[1],my_z+currentpos[2],my_wx+currentpos[3],my_wy+currentpos[4],my_wz+currentpos[5])
+
+                BREAK
+                WRITE (lun, handle) "MOVELR;ended; "
+            END
+
+            ; ******************************************** ;
+            ; *********** MOVE JOINT RELATIVE *********** ;
+            ; ******************************************** ;
+
+            IF STRDIF($parsed.str,"MOVEJR") == 0 THEN ; 0 = strings are identical byte by byte
+                TYPE "** MOVE JOINT RELATIVE **"
+                WRITE (lun, handle) "MOVEJR;started; "
+                SPEED speed
+
+                HERE #ref
+                DECOMPOSE x[] = #ref
+                MOVE #PPOINT(x[0]+my_x,x[1]+my_y,x[2]+my_z,x[3]+my_wx,x[4]+my_wy,x[5]+my_wz)
+
+                BREAK
+                WRITE (lun, handle) "MOVEJR;ended; "
+            END
+
+
+            ; ******************************************** ;
+            ; ************** GET POSITION **************** ;
+            ; ******************************************** ;
+
+            IF STRDIF($parsed.str,"GETPOS") == 0 THEN     ; 0 = strings are identical byte by byte
+                TYPE "** GET POSITION **"
+
+                HERE curr_robot_pos     ; Read and save current world position
+                DECOMPOSE currentpos[] = curr_robot_pos
+
+                WRITE (lun, handle) "[", currentpos[0], currentpos[1], currentpos[2], currentpos[3], currentpos[4], currentpos[5], "]"
+
+            END
+
+            ; ******************************************** ;
+            ; ************** GET JOINT **************** ;
+            ; ******************************************** ;
+
+            IF STRDIF($parsed.str,"GETJOINT") == 0 THEN     ; 0 = strings are identical byte by byte
+                TYPE "** GET POSITION **"
+
+                HERE #curr_robot_pos    ; Read and save current joint position
+                DECOMPOSE currentpos[] = #curr_robot_pos
+
+                WRITE (lun, handle) "[", currentpos[0], currentpos[1], currentpos[2], currentpos[3], currentpos[4], currentpos[5], "]"
+
+            END
+
+            ; MOVE
+            ; MOVES
+
+            CASE my_value OF
+
+              VALUE 10:
+                TYPE "Connection is active"
+                HERE curr_robot_pos
+                DECOMPOSE currentpos[] = curr_robot_pos
+                ;WRITE (lun, handle) "world", currentpos[0], currentpos[1], currentpos[2], currentpos[3], currentpos[4], currentpos[5]
+
+                BREAK
+
+
+              VALUE 11:
+                TYPE "Connection is active"
+                HERE #curr_robot_pos
+                DECOMPOSE currentpos[] = #curr_robot_pos
+                ;WRITE (lun, handle) "joint", currentpos[0], currentpos[1], currentpos[2], currentpos[3], currentpos[4], currentpos[5]
+
+                BREAK
+
+
+              VALUE 100:     ; Move to cartesian point
+                SET goal_pos = TRANS(my_x,my_y,my_z,my_wx,my_wy,my_wz)
+
+; Error trapping
+                REACTE error.trap
+
+                MOVE goal_pos
+                BREAK
+
+
+              VALUE 200:     ; Move to joint configuration
+                SET #gui_move_loc = #PPOINT(my_x,my_y,my_z,my_wx,my_wy,my_wz)
+
+                REACTE error.trap
+
+                MOVE #gui_move_loc
+                BREAK
+
+
+              VALUE 300:     ; close gripper
+
+                REACTE error.trap
+
+                SIGNAL -3001
+
+                BREAK
+
+              VALUE 301:     ;open gripper
+
+                REACTE error.trap
+
+                SIGNAL 3001
+
+                BREAK
+
+              ANY
+
+
+            END
+
+;            IF error == 0 THEN
+;                READ (lun, handle, no_wait) $crap.str
+;                WRITE (lun, handle) "2164"
+;                TYPE "Sent 2164 to VBAI"
+;            ELSE
+;                READ (lun, handle, no_wait) $crap.str
+;                WRITE (lun, handle) "9999"
+;                TYPE "::error"
+;            END
+;            error = 0
+
+
+        END
+
+        RETURN
+
+.END

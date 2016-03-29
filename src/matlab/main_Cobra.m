@@ -29,14 +29,12 @@ close all; clear all; clc;
 %**************************************************************************
 
 %% Conection between robot and computer  
-% % Creates the conector object
-% RobotConnector;
-% r = RobotConnector;
-% 
-% %r.moveLinear
-% %r.moveJoint
-% r.closeGrapper
-% r.openGrapper
+% Creates the conector object
+RobotConnector;
+r = RobotConnector;
+
+r.openGrapper
+r.closeGrapper
 
 %% Structure of the code
 

@@ -5,7 +5,7 @@
 % coordTranslation.m
 %
 %**************************************************************************
-%
+% 
 % Group 832
 % Aalborg University
 % March 2016
@@ -22,7 +22,10 @@ clear all; close all; clc;
 
 % Load intrinsics and image
 load Calib_Results.mat;
-img = rgb2gray(imread('calibration/c1.jpg'));
+img = rgb2gray(imread('fig/c31.jpg'));
+cd ('fig/');
+extrinsic_computation;
+cd('..');
 
 % Extrinsic and Intrinsic Matrices are used to change the coordinate
 % systems

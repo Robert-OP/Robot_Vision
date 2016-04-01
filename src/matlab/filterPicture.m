@@ -24,8 +24,24 @@ clear all; close all; clc;
 %% MAIN
 
 load Calib_Results.mat;
-I = imread('fig/c31.jpg');
-Igray = rgb2gray(I);
-undistortImage(Igray,fc,cc,alpha_c,kc);
-% cd('fig/');
-% recomp_corner_calib;
+img = imread('calibration/c1.jpg');
+img = rgb2gray(img);
+
+% Intrinsic Parameters are already calculated
+I_param = [KK];
+% Extrinsic Parameters
+temp = comp_ext_calib
+E_param = [Rc_1 Tc_1];
+% World coordinates
+worldCoord = [900; 900; 0; 1];
+
+% Coordinates transformation
+imgCoord= I_param*E_param*worldCoord;
+imgCoord = imgCoord/imgCoord(3);
+
+figure();
+
+imshow(img)
+hold on;
+plot(imgCoord(1),imgCoord(2),'rx');
+% scatter(imgCoord(1),imgCoord(2),'x');

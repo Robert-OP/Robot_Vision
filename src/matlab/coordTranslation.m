@@ -29,7 +29,7 @@ cd('..');
 
 % Extrinsic and Intrinsic Matrices are used to change the coordinate
 % systems
-extrinsic = [Rc_1 Tc_1];
+extrinsic = [Rc_ext Tc_ext];
 intrinsic = KK;
 
 % Projective Matrix

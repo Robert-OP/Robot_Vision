@@ -16,16 +16,19 @@
 % 
 %**************************************************************************
 
-clear all; close all; clc;
+% clear all; close all; clc;
 
 %% MAIN
 
+tester;
+
 % Load intrinsics and image
 load Calib_Results.mat;
-img = rgb2gray(imread('fig/c31.jpg'));
-cd ('fig/');
-extrinsic_computation;
-cd('..');
+load extrinsic.mat
+img = rgb2gray(imread('fig/chessboard1.jpg'));
+% cd ('fig/');
+% extrinsic_computation;
+% cd('..');
 
 % Extrinsic and Intrinsic Matrices are used to change the coordinate
 % systems
@@ -45,11 +48,19 @@ img_og = Proj*[0;0;1];
 w = img_og(3);
 img_og = img_og/w;
 
+% Corners
+img_cur = Proj*[29*7;0;1];
+img_cur = img_cur/w;
+img_cul = Proj*[29*7;29*10;1];
+img_cul = img_cul/w;
+img_cdl = Proj*[0;29*10;1];
+img_cdl = img_cdl/w;
+
 % Values that we will use; they will be some input provided by some
 % functions which will calculate the correct position of the block on the 
 % image. NOW ONLY TEST VALUES
-img_coordx = 400;
-img_coordy = 400;
+img_coordx = img_cur(1);
+img_coordy = img_cur(2);
 img_coord = [img_coordx; img_coordy; 1];
 
 % The invertion of the P matrix will be made in order to find the 
@@ -62,7 +73,37 @@ w_coord = Proj\(w*img_coord);
 w_coordx = w_coord(1)/(w_coord(3));
 w_coordy = w_coord(2)/(w_coord(3));
 
+% GRIPPING
+% Z = 204
+% r = -45
+
+theta = deg2rad(270);
+% ROBOT FRAME
+Trans_mat = [cos(theta)    -sin(theta)    0    234.658   
+             sin(theta)    cos(theta)    0    400.303
+             0              0             1    0        ];
+r_coord = [Trans_mat; 0 0 0 1]*[w_coord; 1];
+
+
 figure();
-imshow(img)
+iptsetpref('ImshowAxesVisible','on');
+imshow(img,'XData',[0 size(img,2)], 'YData', [0 size(img,1)]);
 hold on;
+grid on;
+grid minor;
+scatter(100,200,'rx');
 scatter(img_og(1),img_og(2),'rx');
+scatter(img_cur(1),img_cur(2),'bx');
+scatter(img_cul(1),img_cul(2),'yx');
+scatter(img_cdl(1),img_cdl(2),'cx');
+
+fprintf('Image Coordinates: X: %.4f Y: %.4f\n',img_coord(1),img_coord(2));
+fprintf('World Coordinates: X: %.4f Y: %.4f\n', w_coord(1),w_coord(2));
+fprintf('Robot Coordinates: X: %.4f Y: %.4f\n', r_coord(1),r_coord(2));
+r.moveLinear(r_coord(1),r_coord(2),250,0,180,-45,10)
+r.moveLinear(r_coord(1),r_coord(2),205,0,180,-45,5)
+r.openGrapper
+r.moveLinear(r_coord(1),r_coord(2),250,0,180,-45,5)
+% chessboard = img(img_cur(2):img_cdl(2),img_cul(1):img_og(1));
+% figure();
+% imshow(chessboard);

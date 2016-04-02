@@ -2,12 +2,12 @@
 clear all; close all; clc;
 
 %% Camera connection
-% webcamlist           % shows available cameras on pc
-% cam = webcam(1)      % store camera in a variable and shows parameters
+webcamlist           % shows available cameras on pc
+cam = webcam(2)      % store camera in a variable and shows parameters
 % preview(cam)       % camera preview (stream video)
 % I = snapshot(cam);   % take a picture
 % image(I)             % show image
-I = imread('testBlocks.png');
+%I = imread('testBlocks.png');
 %imtool(I)           % read RGB colors from an image to do thresholding
 %%   r_min r_max g_min g_max b_min b_max
 R   = [170   255   0     30    0     30  ];     % red block

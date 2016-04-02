@@ -57,8 +57,8 @@ img_cdl = img_cdl/w;
 % Values that we will use; they will be some input provided by some
 % functions which will calculate the correct position of the block on the 
 % image. NOW ONLY TEST VALUES
-img_coordx = 400;
-img_coordy = 400;
+img_coordx = img_og(1);
+img_coordy = img_og(2);
 img_coord = [img_coordx; img_coordy; 1];
 
 % The invertion of the P matrix will be made in order to find the 

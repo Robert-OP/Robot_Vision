@@ -22,10 +22,11 @@ clear all; close all; clc;
 
 % Load intrinsics and image
 load Calib_Results.mat;
+load extrinsic.mat
 img = rgb2gray(imread('fig/c31.jpg'));
-cd ('fig/');
-extrinsic_computation;
-cd('..');
+% cd ('fig/');
+% extrinsic_computation;
+% cd('..');
 
 % Extrinsic and Intrinsic Matrices are used to change the coordinate
 % systems
@@ -45,6 +46,14 @@ img_og = Proj*[0;0;1];
 w = img_og(3);
 img_og = img_og/w;
 
+% Corners
+img_cur = Proj*[29*7;0;1];
+img_cur = img_cur/w;
+img_cul = Proj*[29*7;29*10;1];
+img_cul = img_cul/w;
+img_cdl = Proj*[0;29*10;1];
+img_cdl = img_cdl/w;
+
 % Values that we will use; they will be some input provided by some
 % functions which will calculate the correct position of the block on the 
 % image. NOW ONLY TEST VALUES
@@ -63,6 +72,17 @@ w_coordx = w_coord(1)/(w_coord(3));
 w_coordy = w_coord(2)/(w_coord(3));
 
 figure();
-imshow(img)
+iptsetpref('ImshowAxesVisible','on');
+imshow(img,'XData',[0 size(img,2)], 'YData', [0 size(img,1)]);
 hold on;
+grid on;
+grid minor;
+scatter(100,200,'rx');
 scatter(img_og(1),img_og(2),'rx');
+scatter(img_cur(1),img_cur(2),'bx');
+scatter(img_cul(1),img_cul(2),'yx');
+scatter(img_cdl(1),img_cdl(2),'cx');
+
+chessboard = img(img_cur(2):img_cdl(2),img_cul(1):img_og(1));
+figure();
+imshow(chessboard);

@@ -11,7 +11,7 @@ image(I)             % show image
 %I = imread('testBlocks.png');
 %imtool(I)           % read RGB colors from an image to do thresholding
 
-
+imwrite(I,'fig/chessboard4.jpg')
 %% New calibration
 
 load('Calib_Results.mat')

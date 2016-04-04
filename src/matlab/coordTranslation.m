@@ -109,11 +109,21 @@ fprintf('Robot Coordinates: X: %.4f Y: %.4f\n', r_coord(1),r_coord(2));
 % GRIPPING
 % Z = 204
 % r = -45
-r.moveLinear(r_coord(1),r_coord(2),250,0,180,-45,10);
-r.moveLinear(r_coord(1),r_coord(2),205,0,180,-45,5);
-% r.openGrapper;
-% r.closeGrapper;
-r.moveLinear(r_coord(1),r_coord(2),250,0,180,-45,5);
+
+r.closeGrapper
+pause(2);
+r.moveLinear(r_coord(1),r_coord(2),250,0,180,-45,20)
+pause(2);
+r.moveLinear(r_coord(1),r_coord(2),205,0,180,-45,10)
+pause(2);
+r.openGrapper
+pause(2);
+r.moveLinear(r_coord(1),r_coord(2),250,0,180,-45,10)
+pause(2);
+
+%Move robot to center (NOT ORIGEN)
+r.moveLinear(425,0,300,0,180,-45,20)
+pause(2);
 
 % chessboard = img(img_cur(2):img_cdl(2),img_cul(1):img_og(1));
 % figure();

@@ -33,5 +33,6 @@ close all; clear all; clc;
 RobotConnector;
 r = RobotConnector;
 
-r.openGrapper
-r.closeGrapper
+% r.closeGrapper
+% r.openGrapper
+% r.closeGrapper

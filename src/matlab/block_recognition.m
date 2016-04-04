@@ -15,7 +15,7 @@
 %
 % 
 %**************************************************************************
-clear all; close all; clc;
+% clear all; close all; clc;
 
 %% Camera connection (Should be done once in the main.m)
 % webcamlist           % shows available cameras on pc
@@ -26,9 +26,11 @@ clear all; close all; clc;
 % image(I)             % show image
 % imtool(I)            % read RGB colors from an image to do thresholding
 
+
+
 %% Background substration with output image in RGB
 img = imread('fig/blocks1.png');
-bkg = imread('background.png');
+bkg = imread('fig/background.png');
 imgG = rgb2gray(img);
 bkgG = rgb2gray(bkg);
 imgF = medfilt2(imgG,[5 5]);
@@ -56,6 +58,7 @@ Bl = [0     50    0     50    0     50  ];   % black
 %% Color Detection - thresholding
 Ib = zeros(size(I,1),size(I,2));   % initialize a black image
 C = O;          % this will be function input !!!
+fprintf('Calculating image coordinates of the block...\n');
 % Ib is the image only with the desired block
 for i=1:size(I,1)
     for j=1:size(I,2)
@@ -81,15 +84,15 @@ for i=1:size(Ib,1)
         end
     end
 end
-figure
-subplot(1,2,1);imshow(I);title('RGB image with background substracted');
-subplot(1,2,2);imshow(Ib);title('Image with desired block');
-
+% figure
+% subplot(1,2,1);imshow(I);title('RGB image with background substracted');
+% subplot(1,2,2);imshow(Ib);title('Image with desired block');
+% 
 %% Edge detection using Canny method
 Ie = edge(Ib,'Canny',[],7); % image with edges
-figure
-subplot(1,2,1);imshow(Ib);title('Detected color block');
-subplot(1,2,2);imshow(Ie);title('Blocks with edges');
+% figure
+% subplot(1,2,1);imshow(Ib);title('Detected color block');
+% subplot(1,2,2);imshow(Ie);title('Blocks with edges');
 
 %% Find block center and area in the image (pixels)
 Im = imfill(Ie,'holes');    % fill the image with edges
@@ -97,7 +100,7 @@ BW = bwlabel(Im,8);         % region labeling
 infoB = regionprops(BW,'centroid','area');  % structure with block info
 block = [cat(1, infoB.Area) cat(1, infoB.Centroid)]; 
 [A, k] = max(block(:,1));   % find max area in the image   
-pxy = block(k,2:3)          % relate the area to the center pixel values 
+pxy = block(k,2:3);          % relate the area to the center pixel values 
 
 row = 1;
 Islope = double(Im);
@@ -115,12 +118,23 @@ for i=2:size(BW,1)-1
         end
     end
 end
+% 
+% figure
+% imshow(Islope)
 
-figure
-imshow(Islope)
+%
+image1 = zeros(3,size(pslope,1));
+r_coord1 = zeros(4,size(pslope,1));
 
-p = polyfit(pslope(:,1),pslope(:,2),1);  % slope a and b
-theta = acot(-p(1))*180/pi               % [deg] desired orientation angle
+for i=1:length(pslope) 
+    image1(:,i) = Proj\(w_og*[pslope(i,:)'; 1]); 
+    r_coord1(:,i) = [Trans_mat; 0 0 0 1]*[image1(:,i); 1]; 
+end
+%
+
+p = polyfit(r_coord1(1,:),r_coord1(2,:),1);  % slope a and b
+theta = rad2deg(atan(-p(1)));               % [deg] desired orientation angle
+rot_angle = 45 - theta;
 
 
 

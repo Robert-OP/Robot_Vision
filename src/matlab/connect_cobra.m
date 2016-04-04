@@ -30,5 +30,7 @@ close all; clear all; clc;
 
 %% Conection between robot and computer  
 % Creates the conector object
-RobotConnector;
+% RobotConnector;
 r = RobotConnector;
+% Camera
+cam = webcam(1);

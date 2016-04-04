@@ -4,7 +4,7 @@ clear all; close all; clc;
 
 %% Camera connection (Should be done once in the main.m)
 % webcamlist           % shows available cameras on pc
-% cam = webcam(1)      % store camera in a variable and shows parameters
+ cam = webcam(1)      % store camera in a variable and shows parameters
 % cam.Resolution = '1920x1080';
 % preview(cam)         % camera preview (stream video)
 % I = snapshot(cam);   % take a picture

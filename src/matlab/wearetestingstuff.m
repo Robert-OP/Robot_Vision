@@ -17,7 +17,7 @@
 load('Calib_Results.mat')
 
 % img = rgb2gray(imread('fig/chessboard4.jpg'));
-img = rgb2gray(imread('fig/chessboard1.jpg'));
+img = rgb2gray(imread('Alvaro_pussy.jpg'));
 
 imshow(img);
 cd('fig/');

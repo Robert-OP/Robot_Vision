@@ -19,7 +19,7 @@
 
 %% Camera connection (Should be done once in the main.m)
 % webcamlist           % shows available cameras on pc
-%  cam = webcam(1)      % store camera in a variable and shows parameters
+% cam = webcam(1)      % store camera in a variable and shows parameters
 % cam.Resolution = '1920x1080';
 % preview(cam)         % camera preview (stream video)
 % I = snapshot(cam);   % take a picture
@@ -29,13 +29,13 @@
 
 
 %% Background substration with output image in RGB
-img = imread('fig/blocks1.png');
+img = imread('fig/block.png');
 bkg = imread('fig/background.png');
 imgG = rgb2gray(img);
 bkgG = rgb2gray(bkg);
 imgF = medfilt2(imgG,[5 5]);
 bkgF = medfilt2(bkgG,[5 5]);
-TH = 30;     % threshold to substract background
+TH = 20;     % threshold to substract background
 I = img;     
 for i=1:size(imgG,1)
     for j=1:size(imgG,2)
@@ -51,13 +51,13 @@ R  = [170   255   0     30    0     30  ];   % red
 G  = [0     75    80    255   90    170 ];   % green
 B  = [0     70    45    100   150   210 ];   % blue
 Y  = [210   255   190   220   80    150 ];   % yellow
-O  = [200   255   90    150   0     30  ];   % orange
+O  = [210   255   120   180   0     115 ];   % orange
 W  = [180   255   180   255   180   255 ];   % white
 Bl = [0     50    0     50    0     50  ];   % black
 
 %% Color Detection - thresholding
 Ib = zeros(size(I,1),size(I,2));   % initialize a black image
-C = R;          % this will be function input !!!
+C = O;          % this will be function input !!!
 fprintf('Calculating image coordinates of the block...\n');
 % Ib is the image only with the desired block
 for i=1:size(I,1)
@@ -90,9 +90,9 @@ subplot(1,2,2);imshow(Ib);title('Image with desired block');
 % 
 %% Edge detection using Canny method
 Ie = edge(Ib,'Canny',[],7); % image with edges
-% figure
-% subplot(1,2,1);imshow(Ib);title('Detected color block');
-% subplot(1,2,2);imshow(Ie);title('Blocks with edges');
+figure
+subplot(1,2,1);imshow(Ib);title('Detected color block');
+subplot(1,2,2);imshow(Ie);title('Blocks with edges');
 
 %% Find block center and area in the image (pixels)
 Im = imfill(Ie,'holes');    % fill the image with edges
@@ -122,7 +122,7 @@ end
 figure
 imshow(Islope)
 
-%
+%%
 image1 = zeros(3,size(pslope,1));
 r_coord1 = zeros(4,size(pslope,1));
 
@@ -133,7 +133,7 @@ end
 %
 
 p = polyfit(r_coord1(1,:),r_coord1(2,:),1);  % slope a and b
-theta = rad2deg(atan(p(1)));               % [deg] desired orientation angle
+theta = rad2deg(atan(p(1)));                 % [deg] desired orientation angle
 rot_angle = 45 + theta;
 
 

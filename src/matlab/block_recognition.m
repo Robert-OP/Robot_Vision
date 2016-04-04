@@ -1,10 +1,25 @@
-%% Group 832 - Project Cobra
-% Block color recognition function
+%**************************************************************************
+%
+% CA8 - ROBOT VISION 
+% MINIPROJECT
+% block_recognition.m
+%
+%**************************************************************************
+% 
+% Group 832
+% Aalborg University
+% March 2016
+%
+%**************************************************************************
+% DESCRIPTION: 
+%
+% 
+%**************************************************************************
 clear all; close all; clc;
 
 %% Camera connection (Should be done once in the main.m)
 % webcamlist           % shows available cameras on pc
- cam = webcam(1)      % store camera in a variable and shows parameters
+%  cam = webcam(1)      % store camera in a variable and shows parameters
 % cam.Resolution = '1920x1080';
 % preview(cam)         % camera preview (stream video)
 % I = snapshot(cam);   % take a picture
@@ -12,7 +27,7 @@ clear all; close all; clc;
 % imtool(I)            % read RGB colors from an image to do thresholding
 
 %% Background substration with output image in RGB
-img = imread('blocks.png');
+img = imread('fig/blocks1.png');
 bkg = imread('background.png');
 imgG = rgb2gray(img);
 bkgG = rgb2gray(bkg);
@@ -40,7 +55,7 @@ Bl = [0     50    0     50    0     50  ];   % black
 
 %% Color Detection - thresholding
 Ib = zeros(size(I,1),size(I,2));   % initialize a black image
-C = Y;          % this will be function input !!!
+C = O;          % this will be function input !!!
 % Ib is the image only with the desired block
 for i=1:size(I,1)
     for j=1:size(I,2)

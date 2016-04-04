@@ -31,7 +31,7 @@
 % Load intrinsics and image
 load Calib_Results.mat;
 load extrinsic.mat
-img = rgb2gray(imread('fig/chessboard1.jpg'));
+img = rgb2gray(imread('fig/Alvaro_pussy.jpg'));
 % cd ('fig/');
 % extrinsic_computation;
 % cd('..');
@@ -50,23 +50,30 @@ Proj(:,3)=[];
 
 % Calculations using the origin to get the w (last value of the matrix
 % Values)
+% Origin
 img_og = Proj*[0;0;1];
-w = img_og(3);
-img_og = img_og/w;
-
+w_og = img_og(3);
+img_og = img_og/w_og;
 % Corners
 img_cur = Proj*[29*7;0;1];
-img_cur = img_cur/w;
+w_cur = img_cur(3);
+img_cur = img_cur/img_cur(3);
 img_cul = Proj*[29*7;29*10;1];
-img_cul = img_cul/w;
+w_cul = img_cul(3);
+img_cul = img_cul/img_cul(3);
 img_cdl = Proj*[0;29*10;1];
-img_cdl = img_cdl/w;
+w_cdl = img_cdl(3);
+img_cdl = img_cdl/img_cdl(3);
+% Auxiliar
+img_aux = Proj*[29*3; 29*5; 1];
+w_aux = img_aux(3);
+img_aux = img_aux/img_aux(3);
 
 % Values that we will use; they will be some input provided by some
 % functions which will calculate the correct position of the block on the 
 % image. NOW ONLY TEST VALUES
-img_coordx = img_og(1);
-img_coordy = img_og(2);
+img_coordx = 1213.9;
+img_coordy = 663.3;
 img_coord = [img_coordx; img_coordy; 1];
 
 % The invertion of the P matrix will be made in order to find the 
@@ -74,10 +81,10 @@ img_coord = [img_coordx; img_coordy; 1];
 % correct because we need to normalize it using the third value of the same
 % matrix. We need to divide by 100 to get the values with correct units
 % (cm).
-w_coord = Proj\(w*img_coord);
-
+w_coord = Proj\(925*img_coord);
 w_coordx = w_coord(1)/(w_coord(3));
 w_coordy = w_coord(2)/(w_coord(3));
+w_coord = [w_coordx; w_coordy; 1];
 
 % ROBOT FRAME
 theta = deg2rad(270);
@@ -109,22 +116,20 @@ fprintf('Robot Coordinates: X: %.4f Y: %.4f\n', r_coord(1),r_coord(2));
 % GRIPPING
 % Z = 204
 % r = -45
+% 58.875
 
 r.closeGrapper
 pause(2);
-r.moveLinear(r_coord(1),r_coord(2),250,0,180,-45,20)
+r.moveLinear(r_coord(1),r_coord(2),250,0,180,-6.66,20)
 pause(2);
-r.moveLinear(r_coord(1),r_coord(2),205,0,180,-45,10)
+r.moveLinear(r_coord(1),r_coord(2),215,0,180,-6.66,10)
 pause(2);
 r.openGrapper
 pause(2);
-r.moveLinear(r_coord(1),r_coord(2),250,0,180,-45,10)
+r.moveLinear(r_coord(1),r_coord(2),250,0,180,-6.66,10)
 pause(2);
 
 %Move robot to center (NOT ORIGEN)
 r.moveLinear(425,0,300,0,180,-45,20)
 pause(2);
 
-% chessboard = img(img_cur(2):img_cdl(2),img_cul(1):img_og(1));
-% figure();
-% imshow(chessboard);

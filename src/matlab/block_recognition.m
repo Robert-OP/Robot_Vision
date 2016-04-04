@@ -4,7 +4,7 @@ clear all; close all; clc;
 
 %% Camera connection (Should be done once in the main.m)
 % webcamlist           % shows available cameras on pc
-cam = webcam(1)      % store camera in a variable and shows parameters
+% cam = webcam(1)      % store camera in a variable and shows parameters
 % cam.Resolution = '1920x1080';
 % preview(cam)         % camera preview (stream video)
 % I = snapshot(cam);   % take a picture
@@ -12,13 +12,13 @@ cam = webcam(1)      % store camera in a variable and shows parameters
 % imtool(I)            % read RGB colors from an image to do thresholding
 
 %% Background substration with output image in RGB
-% img = imread('current.tif');
-% bkg = imread('background.tif');
+img = imread('blocks.png');
+bkg = imread('background.png');
 imgG = rgb2gray(img);
 bkgG = rgb2gray(bkg);
 imgF = medfilt2(imgG,[5 5]);
 bkgF = medfilt2(bkgG,[5 5]);
-TH = 20;     % threshold to substract background
+TH = 30;     % threshold to substract background
 I = img;     
 for i=1:size(imgG,1)
     for j=1:size(imgG,2)
@@ -33,7 +33,7 @@ end
 R  = [170   255   0     30    0     30  ];   % red 
 G  = [0     75    80    255   90    170 ];   % green
 B  = [0     70    45    100   150   210 ];   % blue
-Y  = [210   255   190   220   80    120 ];   % yellow
+Y  = [210   255   190   220   80    150 ];   % yellow
 O  = [200   255   90    150   0     30  ];   % orange
 W  = [180   255   180   255   180   255 ];   % white
 Bl = [0     50    0     50    0     50  ];   % black
@@ -54,7 +54,7 @@ for i=1:size(I,1)
     end
 end
 
-%% Filter and Blur image 
+% Filter and Blur image 
 Ib = medfilt2(Ib,[2 2]);     % remove noise
 Ib = imgaussfilt(Ib, 2);     % blur - apply gauss filter
 % complete blurred image

@@ -4,7 +4,7 @@ clear all; close all; clc;
 
 %% Camera connection (Should be done once in the main.m)
 % webcamlist           % shows available cameras on pc
-% cam = webcam(1)      % store camera in a variable and shows parameters
+cam = webcam(1)      % store camera in a variable and shows parameters
 % cam.Resolution = '1920x1080';
 % preview(cam)         % camera preview (stream video)
 % I = snapshot(cam);   % take a picture
@@ -12,13 +12,13 @@ clear all; close all; clc;
 % imtool(I)            % read RGB colors from an image to do thresholding
 
 %% Background substration with output image in RGB
-img = imread('current.tif');
-bkg = imread('background.tif');
+% img = imread('current.tif');
+% bkg = imread('background.tif');
 imgG = rgb2gray(img);
 bkgG = rgb2gray(bkg);
 imgF = medfilt2(imgG,[5 5]);
 bkgF = medfilt2(bkgG,[5 5]);
-TH = 10;     % threshold to substract background
+TH = 20;     % threshold to substract background
 I = img;     
 for i=1:size(imgG,1)
     for j=1:size(imgG,2)
@@ -40,7 +40,7 @@ Bl = [0     50    0     50    0     50  ];   % black
 
 %% Color Detection - thresholding
 Ib = zeros(size(I,1),size(I,2));   % initialize a black image
-C = B;          % this will be function input !!!
+C = Y;          % this will be function input !!!
 % Ib is the image only with the desired block
 for i=1:size(I,1)
     for j=1:size(I,2)
@@ -82,7 +82,7 @@ BW = bwlabel(Im,8);         % region labeling
 infoB = regionprops(BW,'centroid','area');  % structure with block info
 block = [cat(1, infoB.Area) cat(1, infoB.Centroid)]; 
 [A, k] = max(block(:,1));   % find max area in the image   
-pxy = block(k,2:3);         % relate the area to the center pixel values 
+pxy = block(k,2:3)          % relate the area to the center pixel values 
 
 row = 1;
 Islope = double(Im);

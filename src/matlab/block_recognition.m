@@ -4,8 +4,8 @@ clear all; close all; clc;
 
 %% Camera connection (Should be done once in the main.m)
 % webcamlist           % shows available cameras on pc
-cam = webcam(1)      % store camera in a variable and shows parameters
-cam.Resolution = '1920x1080';
+% cam = webcam(1)      % store camera in a variable and shows parameters
+% cam.Resolution = '1920x1080';
 % preview(cam)         % camera preview (stream video)
 % I = snapshot(cam);   % take a picture
 % image(I)             % show image
@@ -77,34 +77,35 @@ subplot(1,2,1);imshow(Ib);title('Detected color block');
 subplot(1,2,2);imshow(Ie);title('Blocks with edges');
 
 %% Find block center and area in the image (pixels)
-BW = bwlabel(Ib,8);        % region labeling
+Im = imfill(Ie,'holes');    % fill the image with edges
+BW = bwlabel(Im,8);         % region labeling
 infoB = regionprops(BW,'centroid','area');  % structure with block info
 block = [cat(1, infoB.Area) cat(1, infoB.Centroid)]; 
 [A, k] = max(block(:,1));   % find max area in the image   
-pxy = block(k,2:3);        % relate the area to the pixel values
+pxy = block(k,2:3);         % relate the area to the center pixel values 
 
-row=1;
-other = double(Ib);
+row = 1;
+Islope = double(Im);
 for i=2:size(BW,1)-1
     for j=2:size(BW,2)-1
         if BW(i,j) == k
             if BW(i+1,j) ~= k && BW(i,j+1) ~= k && BW(i-1,j) == k
-                image(row,:) = [i,j];
+                pslope(row,:) = [i,j];
                 row = row+1;
             else
-                other(i,j)=0;
+                Islope(i,j)=0;
             end
         else
-            other(i,j)=0;
+            Islope(i,j)=0;
         end
     end
 end
 
-figure()
-imshow(other)
+figure
+imshow(Islope)
 
-p = polyfit(image(:,1),image(:,2),1);       % Slope and b
-gamma = atan(-p(1));
-theta = pi/2-gamma;     % Desired angle
+p = polyfit(pslope(:,1),pslope(:,2),1);  % slope a and b
+theta = acot(-p(1))*180/pi               % [deg] desired orientation angle
+
 
 

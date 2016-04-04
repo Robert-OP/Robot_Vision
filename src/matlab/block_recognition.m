@@ -57,7 +57,7 @@ Bl = [0     50    0     50    0     50  ];   % black
 
 %% Color Detection - thresholding
 Ib = zeros(size(I,1),size(I,2));   % initialize a black image
-C = O;          % this will be function input !!!
+C = R;          % this will be function input !!!
 fprintf('Calculating image coordinates of the block...\n');
 % Ib is the image only with the desired block
 for i=1:size(I,1)
@@ -84,9 +84,9 @@ for i=1:size(Ib,1)
         end
     end
 end
-% figure
-% subplot(1,2,1);imshow(I);title('RGB image with background substracted');
-% subplot(1,2,2);imshow(Ib);title('Image with desired block');
+figure
+subplot(1,2,1);imshow(I);title('RGB image with background substracted');
+subplot(1,2,2);imshow(Ib);title('Image with desired block');
 % 
 %% Edge detection using Canny method
 Ie = edge(Ib,'Canny',[],7); % image with edges
@@ -119,8 +119,8 @@ for i=2:size(BW,1)-1
     end
 end
 % 
-% figure
-% imshow(Islope)
+figure
+imshow(Islope)
 
 %
 image1 = zeros(3,size(pslope,1));
@@ -133,8 +133,8 @@ end
 %
 
 p = polyfit(r_coord1(1,:),r_coord1(2,:),1);  % slope a and b
-theta = rad2deg(atan(-p(1)));               % [deg] desired orientation angle
-rot_angle = 45 - theta;
+theta = rad2deg(atan(p(1)));               % [deg] desired orientation angle
+rot_angle = 45 + theta;
 
 
 

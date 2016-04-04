@@ -17,7 +17,7 @@
 %**************************************************************************
 
 clearvars -except r cam
-close all; clc;
+close all;
 
 %% MAIN
 % global connection
@@ -28,7 +28,7 @@ close all; clc;
 %     r = RobotConnector;
 %     connection = 1;
 % end
-
+fprintf('\n#############################################\n');
 % Load intrinsics and image
 fprintf('Loading intrinsic and extrinsic parameters...\n');
 load Calib_Results.mat;
@@ -78,6 +78,10 @@ img_aux = Proj*[29*3; 29*5; 1];
 w_aux = img_aux(3);
 img_aux = img_aux/img_aux(3);
 
+w = [w_og; w_cur; w_cul; w_cdl];
+% fprintf('Deviation (w): %f\n',w);
+
+
 %% Getting picture
 
 fprintf('Taking picture of the current workspace...\n');
@@ -106,22 +110,21 @@ w_coord = [w_coordx; w_coordy; 1];
 r_coord = [Trans_mat; 0 0 0 1]*[w_coord; 1];
 
 %% IMAGE 
-% figure();
-% iptsetpref('ImshowAxesVisible','on');
-% imshow(img,'XData',[0 size(img,2)], 'YData', [0 size(img,1)]);
-% hold on;
-% grid on;
-% grid minor;
-% scatter(100,200,'rx');
-% scatter(img_og(1),img_og(2),'rx');
-% scatter(img_cur(1),img_cur(2),'bx');
-% scatter(img_cul(1),img_cul(2),'yx');
-% scatter(img_cdl(1),img_cdl(2),'cx');
+figure();
+iptsetpref('ImshowAxesVisible','on');
+imshow(img,'XData',[0 size(img,2)], 'YData', [0 size(img,1)]);
+hold on;
+grid on;
+grid minor;
+scatter(100,200,'rx');
+scatter(img_og(1),img_og(2),'rx');
+scatter(img_cur(1),img_cur(2),'bx');
+scatter(img_cul(1),img_cul(2),'yx');
+scatter(img_cdl(1),img_cdl(2),'cx');
 
 
 % Print Coordinates
-fprintf('Image Coordinates: X: %.4f Y: %.4f\n',img_coord(1),img_coord(2));
-fprintf('Rotation angle: %.4f degrees\n',rot_angle);
+fprintf('Image Coordinates: X: %.4f Y: %.4f R: %.4f degrees\n',img_coord(1),img_coord(2),rot_angle);
 fprintf('World Coordinates: X: %.4f Y: %.4f\n', w_coord(1),w_coord(2));
 fprintf('Robot Coordinates: X: %.4f Y: %.4f\n', r_coord(1),r_coord(2));
 
@@ -148,4 +151,4 @@ r.moveLinear(425,0,300,0,180,0,20)
 pause(2);
 
 fprintf('Program finished!\n');
-
+fprintf('#############################################\n\n');

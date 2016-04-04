@@ -267,7 +267,7 @@ function robotWait(obj,str)
     end
     
     if strcmp(data,str) == 0
-       disp(['DATA NOT AS EXPECTED! received: ' data]); 
+%        disp(['DATA NOT AS EXPECTED! received: ' data]); 
     end 
     
 end

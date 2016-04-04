@@ -12,8 +12,8 @@ cam.Resolution = '1920x1080';
 % imtool(I)            % read RGB colors from an image to do thresholding
 
 %% Background substration with output image in RGB
-% img = imread('current.tif');
-% bkg = imread('background.tif');
+img = imread('current.tif');
+bkg = imread('background.tif');
 imgG = rgb2gray(img);
 bkgG = rgb2gray(bkg);
 imgF = medfilt2(imgG,[5 5]);
@@ -80,7 +80,31 @@ subplot(1,2,2);imshow(Ie);title('Blocks with edges');
 BW = bwlabel(Ib,8);        % region labeling
 infoB = regionprops(BW,'centroid','area');  % structure with block info
 block = [cat(1, infoB.Area) cat(1, infoB.Centroid)]; 
-[A k] = max(block(:,1));   % find max area in the image   
+[A, k] = max(block(:,1));   % find max area in the image   
 pxy = block(k,2:3);        % relate the area to the pixel values
+
+row=1;
+other = double(Ib);
+for i=2:size(BW,1)-1
+    for j=2:size(BW,2)-1
+        if BW(i,j) == k
+            if BW(i+1,j) ~= k && BW(i,j+1) ~= k && BW(i-1,j) == k
+                image(row,:) = [i,j];
+                row = row+1;
+            else
+                other(i,j)=0;
+            end
+        else
+            other(i,j)=0;
+        end
+    end
+end
+
+figure()
+imshow(other)
+
+p = polyfit(image(:,1),image(:,2),1);       % Slope and b
+gamma = atan(-p(1));
+theta = pi/2-gamma;     % Desired angle
 
 

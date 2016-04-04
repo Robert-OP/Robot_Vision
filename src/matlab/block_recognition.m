@@ -27,10 +27,9 @@
 % imtool(I)            % read RGB colors from an image to do thresholding
 
 
-
 %% Background substration with output image in RGB
-img = imread('fig/block.png');
-bkg = imread('fig/background.png');
+img = imread('fig_calib/current.tif');
+bkg = imread('fig_calib/background.tif');
 imgG = rgb2gray(img);
 bkgG = rgb2gray(bkg);
 imgF = medfilt2(imgG,[5 5]);
@@ -57,7 +56,7 @@ Bl = [0     50    0     50    0     50  ];   % black
 
 %% Color Detection - thresholding
 Ib = zeros(size(I,1),size(I,2));   % initialize a black image
-C = O;          % this will be function input !!!
+C = B;          % this will be function input !!!
 fprintf('Calculating image coordinates of the block...\n');
 % Ib is the image only with the desired block
 for i=1:size(I,1)
@@ -130,10 +129,9 @@ for i=1:length(pslope)
     image1(:,i) = Proj\(w_og*[pslope(i,:)'; 1]); 
     r_coord1(:,i) = [Trans_mat; 0 0 0 1]*[image1(:,i); 1]; 
 end
-%
 
 p = polyfit(r_coord1(1,:),r_coord1(2,:),1);  % slope a and b
-theta = rad2deg(atan(p(1)));                 % [deg] desired orientation angle
+theta = rad2deg(atan(p(1)));             % [deg] desired orientation angle
 rot_angle = 45 + theta;
 
 

@@ -33,7 +33,7 @@ fprintf('\n#############################################\n');
 fprintf('Loading intrinsic and extrinsic parameters...\n');
 load Calib_Results.mat;
 load extrinsic.mat
-img = rgb2gray(imread('fig/chessboard.jpg'));
+img = rgb2gray(imread('fig_calib/calib1.tif'));
 % cd ('fig/');
 % extrinsic_computation;
 % cd('..');
@@ -52,10 +52,11 @@ Proj = intrinsic*extrinsic;
 Proj(:,3)=[];
 
 % ROBOT FRAME
-theta_r = deg2rad(270);
-Trans_mat = [cos(theta_r)    -sin(theta_r)    0    234.658   
-             sin(theta_r)    cos(theta_r)    0    400.303
-             0              0             1         0        ];
+%theta_r = deg2rad(270);
+theta_r = 0;
+Trans_mat = [cos(theta_r)    -sin(theta_r)    0    266.672   
+             sin(theta_r)     cos(theta_r)    0    226.186
+                 0                0           1       0      ];
 
 % Calculations using the origin to get the w (last value of the matrix
 % Values)

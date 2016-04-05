@@ -33,7 +33,7 @@ fprintf('\n#############################################\n');
 fprintf('Loading intrinsic and extrinsic parameters...\n');
 load Calib_Results.mat;
 load extrinsic.mat
-img = rgb2gray(imread('fig_calib/calib1.tif'));
+img_chess = rgb2gray(imread('fig_calib/calib1.tif'));
 % cd ('fig/');
 % extrinsic_computation;
 % cd('..');
@@ -65,13 +65,13 @@ img_og = Proj*[0;0;1];
 w_og = img_og(3);
 img_og = img_og/w_og;
 % Corners
-img_cur = Proj*[29*7;0;1];
+img_cur = Proj*[29*8;0;1];
 w_cur = img_cur(3);
 img_cur = img_cur/img_cur(3);
-img_cul = Proj*[29*7;29*10;1];
+img_cul = Proj*[29*8;29*5;1];
 w_cul = img_cul(3);
 img_cul = img_cul/img_cul(3);
-img_cdl = Proj*[0;29*10;1];
+img_cdl = Proj*[0;29*5;1];
 w_cdl = img_cdl(3);
 img_cdl = img_cdl/img_cdl(3);
 % Auxiliar
@@ -86,7 +86,7 @@ w = [w_og; w_cur; w_cul; w_cdl];
 %% Getting picture
 
 fprintf('Taking picture of the current workspace...\n');
-% imwrite(snapshot(cam(1)),'fig/blocks1.png');
+% imwrite(snapshot(cam(1)),'fig_calib/current.TIF');
 block_recognition;
 
 % Values that we will use; they will be some input provided by some
@@ -113,11 +113,10 @@ r_coord = [Trans_mat; 0 0 0 1]*[w_coord; 1];
 %% IMAGE 
 figure();
 iptsetpref('ImshowAxesVisible','on');
-imshow(img,'XData',[0 size(img,2)], 'YData', [0 size(img,1)]);
+imshow(img_chess,'XData',[0 size(img,2)], 'YData', [0 size(img,1)]);
 hold on;
 grid on;
 grid minor;
-scatter(100,200,'rx');
 scatter(img_og(1),img_og(2),'rx');
 scatter(img_cur(1),img_cur(2),'bx');
 scatter(img_cul(1),img_cul(2),'yx');
@@ -136,20 +135,20 @@ fprintf('Robot Coordinates: X: %.4f Y: %.4f\n', r_coord(1),r_coord(2));
 
 fprintf('Starting motion of the robot...\n');
 
-r.closeGrapper
-pause(2);
-r.moveLinear(r_coord(1),r_coord(2),250,0,180,rot_angle,20)
-pause(2);
-r.moveLinear(r_coord(1),r_coord(2),215,0,180,rot_angle,10)
-pause(2);
-r.openGrapper
-pause(2);
-r.moveLinear(r_coord(1),r_coord(2),250,0,180,rot_angle,10)
-pause(2);
-
-%Move robot to center (NOT ORIGEN)
-r.moveLinear(425,0,300,0,180,0,20)
-pause(2);
+% r.closeGrapper
+% pause(2);
+% r.moveLinear(r_coord(1),r_coord(2),250,0,180,rot_angle,20)
+% pause(2);
+% r.moveLinear(r_coord(1),r_coord(2),215,0,180,rot_angle,10)
+% pause(2);
+% r.openGrapper
+% pause(2);
+% r.moveLinear(r_coord(1),r_coord(2),250,0,180,rot_angle,10)
+% pause(2);
+% 
+% %Move robot to center (NOT ORIGEN)
+% r.moveLinear(425,0,300,0,180,0,20)
+% pause(2);
 
 fprintf('Program finished!\n');
 fprintf('#############################################\n\n');

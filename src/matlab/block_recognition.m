@@ -89,9 +89,9 @@ subplot(1,2,2);imshow(Ib);title('Image with desired block');
 % 
 %% Edge detection using Canny method
 Ie = edge(Ib,'Canny',[],7); % image with edges
-figure
-subplot(1,2,1);imshow(Ib);title('Detected color block');
-subplot(1,2,2);imshow(Ie);title('Blocks with edges');
+% figure
+% subplot(1,2,1);imshow(Ib);title('Detected color block');
+% subplot(1,2,2);imshow(Ie);title('Blocks with edges');
 
 %% Find block center and area in the image (pixels)
 Im = imfill(Ie,'holes');    % fill the image with edges
@@ -118,8 +118,8 @@ for i=2:size(BW,1)-1
     end
 end
 % 
-figure
-imshow(Islope)
+% figure
+% imshow(Islope)
 
 %%
 image1 = zeros(3,size(pslope,1));

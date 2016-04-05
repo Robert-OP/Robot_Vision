@@ -33,4 +33,4 @@ close all; clear all; clc;
 % RobotConnector;
 r = RobotConnector;
 % Camera
-cam = webcam(1);
+% cam = webcam(1);

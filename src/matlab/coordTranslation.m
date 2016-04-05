@@ -85,7 +85,7 @@ w = [w_og; w_cur; w_cul; w_cdl];
 %% Getting picture
 
 fprintf('Taking picture of the current workspace...\n');
-imwrite(snapshot(cam(1)),'fig/blocks1.png');
+% imwrite(snapshot(cam(1)),'fig/blocks1.png');
 block_recognition;
 
 % Values that we will use; they will be some input provided by some

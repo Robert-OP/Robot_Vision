@@ -38,7 +38,9 @@ elseif strcmp(colors,'y')
     colors = 'yellow';
 elseif strcmp(colors,'o')
     O  = [210   255   120   180   0     115 ];   % orange
+%     O  = [190   240   40   190   0     140 ];   % orange
     color = O;
+    colors = 'orange';
 elseif strcmp(colors,'w')
     W  = [180   255   180   255   180   255 ];   % white
     color = W;
@@ -159,6 +161,6 @@ end
 p = polyfit(r_coord1(1,:),r_coord1(2,:),1);  % slope a and b
 theta = rad2deg(atan(p(1)));             % [deg] desired orientation angle
 rot_angle = 46 + theta;
-
+rot_angle = 45;
 end
 

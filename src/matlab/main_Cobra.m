@@ -35,10 +35,11 @@ close all;
 %% Global variables
 
 DEF_COLOR = 'b';
-STR_HOMER = 'bwy';      % Bottom to top: Blue, white and yellow
+STR_HOMER = 'bro';      % Bottom to top: Blue, white and yellow
 STR_MARGE = 'gyb';      % Bottom to top: Green, yellow and blue
 STR_BART = 'boy';       % Bottom to top: Blue, orange, yellow
 plotr = 0;
+onthefly = 1;
 
 %% USER INTERFACE
 % Program starting
@@ -52,7 +53,7 @@ fprintf('Input either the name of the character or its respective letter of the 
 prompt = 'A) Homer\nB) Marge\nC) Bart\n\nYour answer: ';
 
 % usrIn = input(prompt,'s');
-usrIn = '';
+usrIn = 'A';
 if (strcmp(usrIn,'homer') || strcmp(usrIn,'A') || strcmp(usrIn,'a'))
     fprintf('\nYou chose: A) Homer\n');
     build = STR_HOMER;
@@ -67,64 +68,68 @@ else
     build = DEF_COLOR;
 end
 
-% Loop to make the figure
 
+%% Getting picture of Workspace and loading images and parameters
+fprintf('##############################################################################\n');
+fprintf('Loading intrinsic and extrinsic parameters...\n');
+load Calib_Results.mat;
+load extrinsic.mat
+img_chess = rgb2gray(imread('fig_calib/calib1.tif'));
+img_bkg = imread('fig_calib/background.tif');
+fprintf('Taking picture of the current workspace...\n');
+img_curr = snapshot(cam(1));
+imwrite(img_curr,'fig_calib/current.TIF');
+
+% Extrinsic and Intrinsic Matrices are used to change the coordinate
+% systems
+fprintf('Creating projective matrix...\n');
+extrinsic = [Rc_ext Tc_ext];
+intrinsic = KK;
+Proj = intrinsic*extrinsic;
+% We can ignore the third column because the Z coordinate is always zero.
+% So we will have a 3x3 matrix and we will be able to inverse it.
+Proj(:,3)=[];
+
+% WORLD - ROBOT Transformation Matrix
+% FUCK THIS SHIT
+% theta_r = 0;
+% Trans_mat = [cos(theta_r)    -sin(theta_r)    0    266.672
+%              sin(theta_r)     cos(theta_r)    0    226.186
+%                  0                0           1       0      ];
+% Experimental Transformation matrix
+Trans_mat = experimentalTrans();
+
+% Calculations using the origin to get the w (last value of the matrix
+% Values)
+% Origin
+img_og = Proj*[0;0;1];
+w_og = img_og(3);
+img_og = img_og/w_og;
+
+% Corners
+img_cur = Proj*[29*8;0;1];
+w_cur = img_cur(3);
+img_cur = img_cur/img_cur(3);
+img_cul = Proj*[29*8;29*5;1];
+w_cul = img_cul(3);
+img_cul = img_cul/img_cul(3);
+img_cdl = Proj*[0;29*5;1];
+w_cdl = img_cdl(3);
+img_cdl = img_cdl/img_cdl(3);
+
+% W term
+w = [w_og; w_cur; w_cul; w_cdl];
+% fprintf('Deviation (w): %f\n',w);
+
+% Loop to make the figure
 for i = 1:length(build)
+    if (onthefly == 0 && i>1)
+        fprintf('Taking picture of the current workspace...\n');
+        img_curr = snapshot(cam(1));
+        imwrite(img_curr,'fig_calib/current.TIF');
+    end
+    %% Detecting color
     colors = build(i);
-    %% Load intrinsics and CHESS and BACKGROUND images
-    fprintf('##############################################################################\n');
-    fprintf('Loading intrinsic and extrinsic parameters...\n');
-    load Calib_Results.mat;
-    load extrinsic.mat
-    img_chess = rgb2gray(imread('fig_calib/calib1.tif'));
-    img_bkg = imread('fig_calib/background.tif');
-    
-    % Extrinsic and Intrinsic Matrices are used to change the coordinate
-    % systems
-    fprintf('Creating projective matrix...\n');
-    extrinsic = [Rc_ext Tc_ext];
-    intrinsic = KK;
-    Proj = intrinsic*extrinsic;
-    % We can ignore the third column because the Z coordinate is always zero.
-    % So we will have a 3x3 matrix and we will be able to inverse it.
-    Proj(:,3)=[];
-    
-    % WORLD - ROBOT Transformation Matrix
-    % FUCK THIS SHIT
-    % theta_r = 0;
-    % Trans_mat = [cos(theta_r)    -sin(theta_r)    0    266.672
-    %              sin(theta_r)     cos(theta_r)    0    226.186
-    %                  0                0           1       0      ];
-    % Experimental Transformation matrix
-    Trans_mat = experimentalTrans();
-    
-    % Calculations using the origin to get the w (last value of the matrix
-    % Values)
-    % Origin
-    img_og = Proj*[0;0;1];
-    w_og = img_og(3);
-    img_og = img_og/w_og;
-    
-    % Corners
-    img_cur = Proj*[29*8;0;1];
-    w_cur = img_cur(3);
-    img_cur = img_cur/img_cur(3);
-    img_cul = Proj*[29*8;29*5;1];
-    w_cul = img_cul(3);
-    img_cul = img_cul/img_cul(3);
-    img_cdl = Proj*[0;29*5;1];
-    w_cdl = img_cdl(3);
-    img_cdl = img_cdl/img_cdl(3);
-    
-    % W term
-    w = [w_og; w_cur; w_cul; w_cdl];
-    % fprintf('Deviation (w): %f\n',w);
-    
-    %% Getting picture of Workspace and detecting colors
-    
-    fprintf('Taking picture of the current workspace...\n');
-    img_curr = snapshot(cam(1));
-    imwrite(img_curr,'fig_calib/current.TIF');
     [img_coord, rot_angle] = blockExtraction(colors,...
         img_curr, img_bkg, Proj, w_og, Trans_mat, plotr);
     img_coordx = img_coord(1);
@@ -144,6 +149,8 @@ for i = 1:length(build)
     w_coord = [w_coordx; w_coordy; 1];
     
     r_coord = [Trans_mat]*[w_coord];
+    offsety = 3;
+    offsetx = -3;
     
     %% Plotting Image and Coordinates
     if plotr == 1
@@ -167,25 +174,102 @@ for i = 1:length(build)
     %% MOVEMENT
     % GRIPPING
     % Z = 204
-    % r = -45
+    % GROUND 1st piece -> 188
+    % GROUND 2st piece -> 205.65
+    % GROUND 3st piece -> 224.5
     
+    % ON THE FLY
+    % GROUND 1st piece -> meh
+    % GROUND 2st piece -> 222.153 up to 260   
+    % GROUND 3st piece -> 241 up to 260
     fprintf('Starting motion of the robot...\n');
     
-    r.closeGrapper
-    pause(2);
-    r.moveLinear(r_coord(1),r_coord(2),250,0,180,rot_angle,20)
-    pause(2);
-    r.moveLinear(r_coord(1),r_coord(2),215,0,180,rot_angle,10)
-    pause(2);
-    r.openGrapper
-    pause(2);
-    r.moveLinear(r_coord(1),r_coord(2),250,0,180,rot_angle,10)
-    pause(2);
+    %Making sure grapper is closed at the start
+    if i == 1
+        r.closeGrapper
+        pause(0.1);
+    end
     
-    %Move robot to center (NOT ORIGEN)
-    r.moveLinear(425,0,300,0,180,0,20)
-    pause(2);
+    % NOT ON THE FLY
+    if onthefly == 0
+        r.closeGrapper
+        pause(0.1);
+        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle,300)
+        pause(0.1);
+        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,205,0,180,rot_angle,20)
+        pause(0.1);
+        r.openGrapper
+        pause(0.1);
+        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle,300)
+        pause(0.1);
+        
+        %Move robot to center (NOT ORIGEN)
+        r.moveLinear(425,0,300,0,180,0,300)
+        pause(0.1);
+        
+        %Construct:
+        r.moveLinear(425,0,230,0,180,45,300)
+        pause(0.1);
+        if i == 1
+            r.moveLinear(425,0,188,0,180,45,20)
+            pause(0.1);
+        elseif i == 2
+            r.moveLinear(425,0,205.65,0,180,45,20)
+            pause(0.1);
+        elseif i == 3
+            r.moveLinear(425,0,224.5,0,180,45,20)
+            pause(0.1);
+        end
+        
+        r.closeGrapper
+        pause(0.1);
+        
+        %Move robot to center (NOT ORIGEN)
+        r.moveLinear(425,0,300,0,180,0,300)
+        pause(0.1);
+        
+    % ON THE FLY
+    elseif onthefly == 1      
+        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle,300)
+        pause(0.1);
+        if i == 1
+            r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,205,0,180,rot_angle,20)
+            pause(0.1);
+            r.openGrapper
+            pause(0.1);
+        elseif i == 2
+            r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,222.153,0,180,rot_angle,20)
+            pause(0.1);
+        elseif i == 3
+            r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,241,0,180,rot_angle,20)
+            pause(0.1);
+        end
+        
+        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle,300)
+        pause(0.1);
+        
+        if i == length(build)
+            
+            %Move robot to center (NOT ORIGEN)
+            r.moveLinear(425,0,300,0,180,0,300)
+            pause(0.1);
+        
+            %Drops the figure
+            r.moveLinear(425,0,224.5,0,180,45,20)
+            pause(0.1);
+            r.closeGrapper
+            pause(0.1);
+        
+            %Move robot to center (NOT ORIGEN)
+            r.moveLinear(425,0,300,0,180,0,300)
+            pause(0.1);
+        end
+    end
+         
+    fprintf('Block done!\n\n');
     
-    fprintf('Program finished!\n');
-    fprintf('##############################################################################\n');
+    if i == length(build)
+        fprintf('Figure finished!\n');
+        fprintf('##############################################################################\n');
+    end
 end

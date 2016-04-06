@@ -35,11 +35,3 @@ cd('..');
 go_calib_optim;
 saving_calib;
 analyse_error;
-
-%% Table coordinate system
-% Define coordinate system with edges of table
-% Get parameters from edge detection
-% Compare blocks with table edges
-
-%% Convert coordinates to robot coordinates
-% Rotation and transformation matrices ?

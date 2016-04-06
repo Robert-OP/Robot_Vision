@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2016.4.2)  2 APR 2016 12:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2016.4.2)  5 APR 2016 12:40
 entering extended mode
 **./master.tex
 (master.tex
@@ -1389,7 +1389,7 @@ LaTeX Font Warning: Font shape `OMS/pplx/m/n' undefined
 \titlepageleftcolumnwidth=\skip82
 \titlepagerightcolumnwidth=\skip83
 
-<figures/aau_logo_en.pdf, id=162, 115.43124pt x 77.28876pt>
+<figures/aau_logo_en.pdf, id=102, 115.43124pt x 77.28876pt>
 File: figures/aau_logo_en.pdf Graphic file (type pdf)
 
 <use figures/aau_logo_en.pdf>
@@ -1423,7 +1423,7 @@ Package babel Info: Redefining danish shorthand "|
 Package babel Info: Redefining danish shorthand "~
 (babel)             in language  on input line 36.
 
-<figures/aau_logo_da.pdf, id=179, 121.45375pt x 77.28876pt>
+<figures/aau_logo_da.pdf, id=119, 121.45375pt x 77.28876pt>
 File: figures/aau_logo_da.pdf Graphic file (type pdf)
 
 <use figures/aau_logo_da.pdf>
@@ -1454,114 +1454,90 @@ Package babel Info: Redefining danish shorthand "~
 ]
 LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <20.74> not available
 (Font)              Font shape `T1/pplx/b/n' tried instead on input line 31.
- (master.toc [7
-
-
-])
+ (master.toc)
 \tf@toc=\write6
 \openout6 = `master.toc'.
 
-
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[8] (master.tdo)
-\tf@tdo=\write7
-\openout7 = `master.tdo'.
-
- (sections/preface.tex [9
-
-
-] [10
-
-
-]) [11] [12
-
-
-]
-(sections/introduction.tex
-Chapter 1.
-Package hyperref Info: bookmark level for unknown todo defaults to 0 on input l
-ine 4.
-) (sections/scenario.tex
-Overfull \hbox (2.0pt too wide) in paragraph at lines 4--1
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 4--1
-
- []
-
-[1
-
-
-] [2
-
-
-]
-Chapter 2.
-LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/pplx/b/n' tried instead on input line 3.
-LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <12> not available
-(Font)              Font shape `T1/pplx/b/n' tried instead on input line 6.
-LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <9> not available
-(Font)              Font shape `T1/pplx/b/n' tried instead on input line 15.
-) (sections/hardwaresetup.tex [3] [4
-
-
-]
-Chapter 3.
-<figures/eBee.png, id=278, 804.00375pt x 536.0025pt>
-File: figures/eBee.png Graphic file (type png)
- <use figures/eBee.png>
-Package pdftex.def Info: figures/eBee.png used on input line 7.
-(pdftex.def)             Requested size: 289.07999pt x 192.7154pt.
-)
-(sections/telecommunication.tex [5 <./figures/eBee.png (PNG copy)>]
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[6]
-Chapter 4.
-) (sections/verification.tex [7
+ [7
 
 
 ] [8
 
 
+] (master.tdo)
+\tf@tdo=\write7
+\openout7 = `master.tdo'.
+
+
+(sections/preface.tex [9] [10
+
+
+]) [11] [12
+
+
+] (sections/introduction.tex
+Chapter 1.
+<figures/simpsonLegoBricks.png, id=183, 601.4972pt x 199.49532pt>
+File: figures/simpsonLegoBricks.png Graphic file (type png)
+
+<use figures/simpsonLegoBricks.png>
+Package pdftex.def Info: figures/simpsonLegoBricks.png used on input line 21.
+(pdftex.def)             Requested size: 289.07999pt x 95.88145pt.
+LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <9> not available
+(Font)              Font shape `T1/pplx/b/n' tried instead on input line 23.
+ [1
+
+
+ <./figures/simpsonLegoBricks.png>])
+(sections/structure.tex
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[2]
+Chapter 2.
+<figures/robotCellDesign.png, id=204, 603.0028pt x 366.61969pt>
+File: figures/robotCellDesign.png Graphic file (type png)
+
+<use figures/robotCellDesign.png>
+Package pdftex.def Info: figures/robotCellDesign.png used on input line 5.
+(pdftex.def)             Requested size: 289.07999pt x 175.75728pt.
+) (sections/verification.tex [3
+
+
+ <./figures/robotCellDesign.png>] [4
+
+
+]
+Chapter 3.
+) (sections/simulation.tex [5] [6
+
+
+]
+Chapter 4.
+LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <14.4> not available
+(Font)              Font shape `T1/pplx/b/n' tried instead on input line 4.
+) (sections/discussion.tex [7] [8
+
+
 ]
 Chapter 5.
-) (sections/simulation.tex [9] [10
+) (sections/conclusion.tex [9] [10
 
 
 ]
 Chapter 6.
-) (sections/discussion.tex [11] [12
+) [11] [12
 
 
 ]
-Chapter 7.
-) (sections/conclusion.tex [13] [14
-
-
-]
-Chapter 8.
-) [15] [16
-
-
-]
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 46.
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 44.
  ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\t1cmtt.fd"
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-(sections/appAname.tex [17] [18
+(sections/appAname.tex [13] [14
 
 
 ]
@@ -1574,19 +1550,23 @@ Overfull \hbox (5.55818pt too wide) in paragraph at lines 14--14
 | 
  []
 
-[19])
+LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <12> not available
+(Font)              Font shape `T1/pplx/b/n' tried instead on input line 16.
+Package hyperref Info: bookmark level for unknown todo defaults to 0 on input l
+ine 24.
+[15])
 \tf@thm=\write8
 \openout8 = `master.thm'.
 
  
 AED: lastpage setting LastPage
 
-Overfull \hbox (2.0pt too wide) in paragraph at lines 30--50
+Overfull \hbox (2.0pt too wide) in paragraph at lines 30--48
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 30--50
+Underfull \hbox (badness 10000) in paragraph at lines 30--48
 
  []
 
@@ -1596,14 +1576,14 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[20]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 50.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 50.
+[16]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 48.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 48.
  (master.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 50.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 50.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 48.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 48.
 Package rerunfilecheck Info: File `master.out' has not changed.
-(rerunfilecheck)             Checksum: 25F3DADE3414CC534D71806BEA2008BB;2275.
+(rerunfilecheck)             Checksum: E9D32C4DADA5A11A78776830BE63E142;1257.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
@@ -1614,11 +1594,11 @@ Package logreq Info: Writing requests to 'master.run.xml'.
  )
 (\end occurred when \iftrue on line 21 was incomplete) 
 Here is how much of TeX's memory you used:
- 24692 strings out of 493634
- 442926 string characters out of 3141312
+ 24665 strings out of 493634
+ 442580 string characters out of 3141312
  780927 words of memory out of 3000000
- 27466 multiletter control sequences out of 15000+200000
- 52658 words of font info for 88 fonts, out of 3000000 for 9000
+ 27453 multiletter control sequences out of 15000+200000
+ 52401 words of font info for 87 fonts, out of 3000000 for 9000
  1030 hyphenation exceptions out of 8191
  64i,14n,80p,897b,2770s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\Kelvin\AppData
@@ -1632,9 +1612,9 @@ am Files (x86)/MiKTeX 2.9/fonts/type1/public/mathpazo/fplmri.pfb><C:/Program Fi
 les (x86)/MiKTeX 2.9/fonts/type1/urw/palatino/uplb8a.pfb><C:/Program Files (x86
 )/MiKTeX 2.9/fonts/type1/urw/palatino/uplr8a.pfb><C:/Program Files (x86)/MiKTeX
  2.9/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on master.pdf (32 pages, 335472 bytes).
+Output written on master.pdf (28 pages, 629940 bytes).
 PDF statistics:
- 481 PDF objects out of 1000 (max. 8388607)
- 84 named destinations out of 1000 (max. 500000)
- 316 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 397 PDF objects out of 1000 (max. 8388607)
+ 75 named destinations out of 1000 (max. 500000)
+ 201 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -46,8 +46,8 @@ else
 end
 
 % Taking into gray and filtered versions of BACKGROUND AND WORKSPACE
-imgG = rgb2gray(img_curr);
-bkgG = rgb2gray(img_bkg);
+imgG = rgb2gray(img_curr); imgG = imcrop(imgG,[900 400 800 600]);
+bkgG = rgb2gray(img_bkg);  bkgG = imcrop(bkgG,[900 400 800 600]);
 imgF = medfilt2(imgG,[5 5]);
 bkgF = medfilt2(bkgG,[5 5]);
 
@@ -62,7 +62,7 @@ for i=1:size(imgG,1)
     end
 end
 
-%% Color Detection - thresholding
+%% Color Detection - Thresholding
 
 Ib = zeros(size(I,1),size(I,2));   % initialize a black image
 
@@ -101,7 +101,7 @@ if plotr == 1
 end
 
 %% Edge detection using Canny method
-Ie = edge(Ib,'Canny',[],7);             % image with edges
+Ie = edge(Ib,'Canny',[],4);             % image with edges
 
 if plotr == 1
     figure
@@ -115,8 +115,8 @@ Im = imfill(Ie,'holes');    % fill the image with edges
 BW = bwlabel(Im,8);         % region labeling
 infoB = regionprops(BW,'centroid','area');  % structure with block info
 block = [cat(1, infoB.Area) cat(1, infoB.Centroid)]; 
-[A, k] = max(block(:,1));   % find max area in the image   
-pxy = block(k,2:3);          % relate the area to the center pixel values 
+[A, k] = max(block(:,1));              % find max area in the image   
+pxy = [block(k,2)+900 block(k,3)+400]; % pixel values 
 Areas = [infoB.Area];
 I_block = bwareaopen(Im,max(Areas));
 Icrop1 = imcrop(Im,[900 400 800 600]);

@@ -117,6 +117,11 @@ infoB = regionprops(BW,'centroid','area');  % structure with block info
 block = [cat(1, infoB.Area) cat(1, infoB.Centroid)]; 
 [A, k] = max(block(:,1));   % find max area in the image   
 pxy = block(k,2:3);          % relate the area to the center pixel values 
+Areas = [infoB.Area];
+I_block = bwareaopen(Im,max(Areas));
+Icrop1 = imcrop(Im,[900 400 800 600]);
+Icrop2 = imcrop(I_block,[900 400 800 600]);
+imshowpair(Icrop1,Icrop2)
 
 %% NEW STUFF
 [coordix, coordiy]=find(Im==1);

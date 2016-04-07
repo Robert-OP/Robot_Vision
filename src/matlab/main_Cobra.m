@@ -186,10 +186,10 @@ for i = 1:length(build)
     fprintf('Starting motion of the robot...\n');
     
     %Making sure grapper is closed at the start
-    if i == 1
-        r.closeGrapper
-        pause(0.1);
-    end
+%     if i == 1
+%         r.closeGrapper
+%         pause(0.1);
+%     end
     
     % NOT ON THE FLY
 %     if onthefly == 0

@@ -119,9 +119,7 @@ block = [cat(1, infoB.Area) cat(1, infoB.Centroid)];
 pxy = [block(k,2)+900 block(k,3)+400]; % pixel values 
 Areas = [infoB.Area];
 I_block = bwareaopen(Im,max(Areas));
-Icrop1 = imcrop(Im,[900 400 800 600]);
-Icrop2 = imcrop(I_block,[900 400 800 600]);
-imshowpair(Icrop1,Icrop2)
+imshowpair(Im,I_block)
 
 %% NEW STUFF
 [coordix, coordiy]=find(Im==1);

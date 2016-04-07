@@ -53,6 +53,7 @@ bkgF = medfilt2(bkgG,[5 5]);
 
 % Substracting Background
 TH = 20;     % threshold to substract background
+img_curr = imcrop(img_curr,[900 400 800 600]);
 I = img_curr;     
 for i=1:size(imgG,1)
     for j=1:size(imgG,2)
@@ -102,7 +103,28 @@ end
 
 %% Edge detection using Canny method
 Ie = edge(Ib,'Canny',[],4);             % image with edges
+%% NEW STUFF 1
+BW = bwlabel(Ie,8); % region labeling
+infoB = regionprops(BW,'centroid','area'); % structure with block info
+block = [cat(1, infoB.Area) cat(1, infoB.Centroid)]; 
+[~, k] = max(block(:,1)); % find max area in the image 
+pxy = block(k,2:3); % relate the area to the center pixel values
 
+row=1;
+Islope = double(Ie);
+for i=2:size(BW,1)-1
+    for j=2:size(BW,2)-1
+        if BW(i,j) ~= k && BW(i,j) ~= 0
+            Islope(i,j) = 0;
+        end
+        
+        if BW(i,j) == k
+            t(row,:)=[i j];
+            row=row+1;
+        end 
+    end
+end
+%%
 if plotr == 1
     figure
     subplot(1,2,1);imshow(Ib);title('Detected color block');
@@ -116,47 +138,124 @@ BW = bwlabel(Im,8);         % region labeling
 infoB = regionprops(BW,'centroid','area');  % structure with block info
 block = [cat(1, infoB.Area) cat(1, infoB.Centroid)]; 
 [A, k] = max(block(:,1));              % find max area in the image   
-pxy = [block(k,2)+900 block(k,3)+400]; % pixel values 
+pxy = [block(k,2) block(k,3)]; % pixel values on the crop 
 Areas = [infoB.Area];
 I_block = bwareaopen(Im,max(Areas));
 imshowpair(Im,I_block)
 
 %% NEW STUFF
-[coordix, coordiy]=find(Im==1);
+[erow, ecolumn] = find(Islope==1);
+norms = zeros(length(erow),1);
 
-[~,indexy]=min(coordiy);
-pointleft = [coordix(indexy) coordiy(indexy)];
+for i=1:length(erow)
+    norms(i)=norm([pxy(2) pxy(1)]-[erow(i) ecolumn(i)]);
+end
 
-[~,indexx] = min(coordix);
-pointdown = [coordix(indexx) coordiy(indexx)];
+u=1;
+coordtest=zeros(4,2);
+[maximum1,index] = max(norms);
+coordtest(u,:) = [erow(index) ecolumn(index)];
+flag=0;
+norms1=sort(norms,'descend');
 
-% figure
-% hold on
-% scatter(pointleft(1),pointleft(2), 'x','r');
-% hold on
-% scatter(pointdown(1),pointdown(2), 'x','r');
+for i=2:length(norms) 
+    index = find(norms==norms1(i));
+    aux = [erow(index), ecolumn(index)];
+    for j=1:u
+        if norm(aux-coordtest(j,:))>15 %%%%% ATTENTION
+            flag = flag+1;
+            if flag == u
+                u=u+1;
+                coordtest(u,:) = aux;
+            end
+        end
+    end
+    flag=0;
+    
+    if u==4
+        break
+    end
+end
 
-% if pointleft(2)-pointdown(2)~=0
-ang = atand(abs(pointleft(1)-pointdown(1))/abs(pointleft(2)-pointdown(2)));
-% else
-% ang = 0;
-% end
+columns=sort(coordtest(:,2));
+index1=find(coordtest(:,2)==columns(1));
+index2=find(coordtest(:,2)==columns(2));
 
-vec1 = Proj\(w_og*[pointleft'; 1]); 
-r_1 = Trans_mat*vec1; 
+if length(index2)>1 
+    if coordtest(index2(1),1) > coordtest(index2(2),1) 
+        index2(2) = [];
+    else
+        index2(1) = []; 
+    end
+end
 
-vec2 = Proj\(w_og*[pointdown'; 1]); 
-r_2 = Trans_mat*vec2; 
+slopecenter1 = (pxy(1)-coordtest(index1,2))/(pxy(2)-coordtest(index1,1));
+b1 = pxy(1)-slopecenter1*pxy(2);
+slopecenter2 = (pxy(1)-coordtest(index2,2))/(pxy(2)-coordtest(index2,1));
+b2 = pxy(1)-slopecenter2*pxy(2);
 
-% figure(2)
-% scatter(r_2(1),r_2(2), 'x','r');
-% hold on
-% scatter(r_1(1),r_1(2), 'x','r');
-coisa = polyfit([r_1(1) r_2(1)],[r_1(2) r_2(2)],1);
-angtheta = atand(coisa(1));
+%PLOT
+figure
+hold on
+scatter(pxy(2),pxy(1), 'x','k');
+hold on
+scatter(coordtest(:,1),coordtest(:,2), 'x','k');
+
+k=1;
+clear points;
+for i=1:length(erow) 
+    y1 = slopecenter1*erow(i) + b1;
+    y2 = slopecenter2*erow(i) + b2;
+    
+    if y1>ecolumn(i) && y2>ecolumn(i)
+       points(k,:) = [erow(i),ecolumn(i)];
+       k=k+1;
+    end
+    
+end
+
+%figure
+hold on
+scatter(points(:,1),points(:,2), 'x','b');
+hold on
+scatter(pxy(2),pxy(1), 'x','k');
+hold on
+scatter(coordtest(:,1),coordtest(:,2), 'x','k');
+
+slope=polyfit(points(:,1),points(:,2),1);
+
+for i=1:length(coordtest) 
+    vecnew(:,i) = Proj\(w_og*[[coordtest(i,1) coordtest(i,2)]'; 1]); 
+    r_new1(:,i) = Trans_mat*vecnew(:,i);
+end
+
+for i=1:length(points)
+    vecnew(:,i) = Proj\(w_og*[[points(i,1) points(i,2)]'; 1]); 
+    r_points(:,i) = Trans_mat*vecnew(:,i);
+end
+
+vec5 = Proj\(w_og*[[pxy(2) pxy(1)]'; 1]); 
+r_5 = Trans_mat*vec5; 
+
+figure
+scatter(r_points(1,:),r_points(2,:), 'x','g');
+hold on
+scatter(r_new1(1,:),r_new1(2,:), 'x','k');
+hold on
+scatter(r_5(1),r_5(2), 'x','r');
+
+finalissimo = polyfit(r_points(1,:),r_points(2,:),1);
+angle = atand(finalissimo(1));
+
+if angle<0
+    finalslope=90-abs(angle);
+else
+    finalslope = angle;
+end
  
 
 %%
-rot_angle = 45 + ang;
+pxy = [pxy(1)+900 pxy(2)+400]; % pixel values 
+rot_angle = finalslope -45;
 end
 

@@ -53,7 +53,7 @@ fprintf('Input either the name of the character or its respective letter of the 
 prompt = 'A) Homer\nB) Marge\nC) Bart\n\nYour answer: ';
 
 % usrIn = input(prompt,'s');
-usrIn = '';
+usrIn = 'C';
 if (strcmp(usrIn,'homer') || strcmp(usrIn,'A') || strcmp(usrIn,'a'))
     fprintf('\nYou chose: A) Homer\n');
     build = STR_HOMER;
@@ -150,8 +150,9 @@ for i = 1:length(build)
     w_coord = [w_coordx; w_coordy; 1];
     
     r_coord = [Trans_mat]*[w_coord];
-    offsety = 3;
-    offsetx = -3;
+    offsety = 6;
+    offsetx = -1;
+    offset_rot = 7;
     
     %% Plotting Image and Coordinates
     if plotr == 1
@@ -188,20 +189,20 @@ for i = 1:length(build)
     %Making sure grapper is closed at the start
     if i == 1
         r.closeGrapper
-        pause(0.1);
+        pause(0.5);
     end
     
     % NOT ON THE FLY
     if onthefly == 0
         r.closeGrapper
         pause(0.1);
-        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle,300)
+        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle+offset_rot,300)
         pause(0.1);
-        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,215,0,180,rot_angle,20)
+        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,205,0,180,rot_angle+offset_rot,20)
         pause(0.1);
         r.openGrapper
-        pause(0.1);
-        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle,300)
+        pause(2);
+        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle+offset_rot,300)
         pause(0.1);
         
         %Move robot to center (NOT ORIGEN)
@@ -231,22 +232,22 @@ for i = 1:length(build)
         
     % ON THE FLY
     elseif onthefly == 1      
-        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle,300)
+        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle+offset_rot,300)
         pause(0.1);
         if i == 1
-            r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,215,0,180,rot_angle,20)
+            r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,205,0,180,rot_angle+offset_rot,20)
             pause(0.1);
             r.openGrapper
             pause(0.1);
         elseif i == 2
-            r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,222.153,0,180,rot_angle,20)
+            r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,222.153,0,180,rot_angle+offset_rot,20)
             pause(0.1);
         elseif i == 3
-            r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,241,0,180,rot_angle,20)
+            r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,241,0,180,rot_angle+offset_rot,20)
             pause(0.1);
         end
         
-        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle,300)
+        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle+offset_rot,300)
         pause(0.1);
         
         if i == length(build)

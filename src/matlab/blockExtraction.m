@@ -19,36 +19,27 @@ function [pxy, rot_angle] = blockExtraction(colors, img_curr, img_bkg, ...
 %**************************************************************************
 
 %% COLOR THRESHOLD
-%     r_min r_max g_min g_max b_min b_max    % block color
-if strcmp(colors,'r')
-    R  = [170   255   0     30    0     30  ];   % red
-    color = R;
-    colors = 'red';
-elseif strcmp(colors,'g')
-    G  = [0     75    80    255   90    170 ];   % green
+%        r_min  r_max g_min g_max b_min b_max    % block color
+if strcmp(colors,'g')
+    G  = [130   200   140   220   20    140 ];   % green
     color = G;
     colors = 'green';
 elseif strcmp(colors,'b')
-    B  = [0     70    45    100   150   210 ];   % blue
+    B  = [0     70    40    130   140   255 ];   % blue
     color = B;
     colors = 'blue';
 elseif strcmp(colors,'y')
-    Y  = [210   255   190   220   80    150 ];   % yellow
+    Y  = [220   255   205   255   0     200 ];   % yellow
     color = Y;
     colors = 'yellow';
 elseif strcmp(colors,'o')
-    O  = [210   255   120   180   0     115 ];   % orange
-%     O  = [190   240   40   190   0     140 ];   % orange
+    O  = [220   240   60    180   0     150 ];   % orange
     color = O;
     colors = 'orange';
 elseif strcmp(colors,'w')
-    W  = [180   255   180   255   180   255 ];   % white
+    W  = [205   255   205   255   205   255 ];   % white
     color = W;
     colors = 'white';
-elseif strcmp(colors,'bl')
-    Bl = [0     50    0     50    0     50  ];   % black
-    color = Bl;
-    colors = 'black';
 else
     fprintf('WARNING: ERROR NOT RECOGNIZED\n');
     color = 0;

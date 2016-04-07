@@ -127,40 +127,42 @@ block = [cat(1, infoB.Area) cat(1, infoB.Centroid)];
 [A, k] = max(block(:,1));   % find max area in the image   
 pxy = block(k,2:3);          % relate the area to the center pixel values 
 
-row = 1;
-Islope = double(Im);
-for i=2:size(BW,1)-1
-    for j=2:size(BW,2)-1
-        if BW(i,j) == k
-            if BW(i+1,j) ~= k && BW(i,j+1) ~= k && BW(i-1,j) == k
-                pslope(row,:) = [i,j];
-                row = row+1;
-            else
-                Islope(i,j)=0;
-            end
-        else
-            Islope(i,j)=0;
-        end
-    end
-end
+%% NEW STUFF
+[coordix, coordiy]=find(Im==1);
 
-if plotr == 1
-    figure
-    imshow(Islope)
-end
+[~,indexy]=min(coordiy);
+pointleft = [coordix(indexy) coordiy(indexy)];
 
-% Transforming slope to robot coordinates and calculating rotate angle
-image1 = zeros(3,size(pslope,1));
-r_coord1 = zeros(3,size(pslope,1));
+[~,indexx] = min(coordix);
+pointdown = [coordix(indexx) coordiy(indexx)];
 
-for i=1:length(pslope) 
-    image1(:,i) = Proj\(w_og*[pslope(i,:)'; 1]); 
-    r_coord1(:,i) = [Trans_mat]*[image1(:,i)]; 
-end
+% figure
+% hold on
+% scatter(pointleft(1),pointleft(2), 'x','r');
+% hold on
+% scatter(pointdown(1),pointdown(2), 'x','r');
 
-p = polyfit(r_coord1(1,:),r_coord1(2,:),1);  % slope a and b
-theta = rad2deg(atan(p(1)));             % [deg] desired orientation angle
-rot_angle = 46 + theta;
-rot_angle = 45;
+% if pointleft(2)-pointdown(2)~=0
+ang = atand(abs(pointleft(1)-pointdown(1))/abs(pointleft(2)-pointdown(2)));
+% else
+% ang = 0;
+% end
+
+vec1 = Proj\(w_og*[pointleft'; 1]); 
+r_1 = Trans_mat*vec1; 
+
+vec2 = Proj\(w_og*[pointdown'; 1]); 
+r_2 = Trans_mat*vec2; 
+
+% figure(2)
+% scatter(r_2(1),r_2(2), 'x','r');
+% hold on
+% scatter(r_1(1),r_1(2), 'x','r');
+coisa = polyfit([r_1(1) r_2(1)],[r_1(2) r_2(2)],1);
+angtheta = atand(coisa(1));
+ 
+
+%%
+rot_angle = 45 + ang;
 end
 

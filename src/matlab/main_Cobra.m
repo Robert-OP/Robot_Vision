@@ -38,8 +38,8 @@ DEF_COLOR = 'b';
 STR_HOMER = 'bro';      % Bottom to top: Blue, white and yellow
 STR_MARGE = 'gyb';      % Bottom to top: Green, yellow and blue
 STR_BART = 'boy';       % Bottom to top: Blue, orange, yellow
-plotr = 0;
-onthefly = 1;
+plotr = 1;
+onthefly = 0;
 
 %% USER INTERFACE
 % Program starting
@@ -130,6 +130,7 @@ for i = 1:length(build)
     end
     %% Detecting color
     colors = build(i);
+    fprintf('Detecting blocks by color in the workspace...\n');
     [img_coord, rot_angle] = blockExtraction(colors,...
         img_curr, img_bkg, Proj, w_og, Trans_mat, plotr);
     img_coordx = img_coord(1);
@@ -191,80 +192,80 @@ for i = 1:length(build)
     end
     
     % NOT ON THE FLY
-    if onthefly == 0
-        r.closeGrapper
-        pause(0.1);
-        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle,300)
-        pause(0.1);
-        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,205,0,180,rot_angle,20)
-        pause(0.1);
-        r.openGrapper
-        pause(0.1);
-        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle,300)
-        pause(0.1);
-        
-        %Move robot to center (NOT ORIGEN)
-        r.moveLinear(425,0,300,0,180,0,300)
-        pause(0.1);
-        
-        %Construct:
-        r.moveLinear(425,0,230,0,180,45,300)
-        pause(0.1);
-        if i == 1
-            r.moveLinear(425,0,188,0,180,45,20)
-            pause(0.1);
-        elseif i == 2
-            r.moveLinear(425,0,205.65,0,180,45,20)
-            pause(0.1);
-        elseif i == 3
-            r.moveLinear(425,0,224.5,0,180,45,20)
-            pause(0.1);
-        end
-        
-        r.closeGrapper
-        pause(0.1);
-        
-        %Move robot to center (NOT ORIGEN)
-        r.moveLinear(425,0,300,0,180,0,300)
-        pause(0.1);
-        
-    % ON THE FLY
-    elseif onthefly == 1      
-        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle,300)
-        pause(0.1);
-        if i == 1
-            r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,205,0,180,rot_angle,20)
-            pause(0.1);
-            r.openGrapper
-            pause(0.1);
-        elseif i == 2
-            r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,222.153,0,180,rot_angle,20)
-            pause(0.1);
-        elseif i == 3
-            r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,241,0,180,rot_angle,20)
-            pause(0.1);
-        end
-        
-        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle,300)
-        pause(0.1);
-        
-        if i == length(build)
-            
-            %Move robot to center (NOT ORIGEN)
-            r.moveLinear(425,0,300,0,180,0,300)
-            pause(0.1);
-        
-            %Drops the figure
-            r.moveLinear(425,0,224.5,0,180,45,20)
-            pause(0.1);
-            r.closeGrapper
-            pause(0.1);
-        
-            %Move robot to center (NOT ORIGEN)
-            r.moveLinear(425,0,300,0,180,0,300)
-            pause(0.1);
-        end
-    end
+%     if onthefly == 0
+%         r.closeGrapper
+%         pause(0.1);
+%         r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle,300)
+%         pause(0.1);
+%         r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,215,0,180,rot_angle,20)
+%         pause(0.1);
+%         r.openGrapper
+%         pause(0.1);
+%         r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle,300)
+%         pause(0.1);
+%         
+%         %Move robot to center (NOT ORIGEN)
+%         r.moveLinear(425,0,300,0,180,0,300)
+%         pause(0.1);
+%         
+%         %Construct:
+%         r.moveLinear(425,0,230,0,180,45,300)
+%         pause(0.1);
+%         if i == 1
+%             r.moveLinear(425,0,188,0,180,45,20)
+%             pause(0.1);
+%         elseif i == 2
+%             r.moveLinear(425,0,205.65,0,180,45,20)
+%             pause(0.1);
+%         elseif i == 3
+%             r.moveLinear(425,0,224.5,0,180,45,20)
+%             pause(0.1);
+%         end
+%         
+%         r.closeGrapper
+%         pause(0.1);
+%         
+%         %Move robot to center (NOT ORIGEN)
+%         r.moveLinear(425,0,300,0,180,0,300)
+%         pause(0.1);
+%         
+%     % ON THE FLY
+%     elseif onthefly == 1      
+%         r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle,300)
+%         pause(0.1);
+%         if i == 1
+%             r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,215,0,180,rot_angle,20)
+%             pause(0.1);
+%             r.openGrapper
+%             pause(0.1);
+%         elseif i == 2
+%             r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,222.153,0,180,rot_angle,20)
+%             pause(0.1);
+%         elseif i == 3
+%             r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,241,0,180,rot_angle,20)
+%             pause(0.1);
+%         end
+%         
+%         r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle,300)
+%         pause(0.1);
+%         
+%         if i == length(build)
+%             
+%             %Move robot to center (NOT ORIGEN)
+%             r.moveLinear(425,0,300,0,180,0,300)
+%             pause(0.1);
+%         
+%             %Drops the figure
+%             r.moveLinear(425,0,224.5,0,180,45,20)
+%             pause(0.1);
+%             r.closeGrapper
+%             pause(0.1);
+%         
+%             %Move robot to center (NOT ORIGEN)
+%             r.moveLinear(425,0,300,0,180,0,300)
+%             pause(0.1);
+%         end
+%     end
          
     fprintf('Block done!\n\n');
     

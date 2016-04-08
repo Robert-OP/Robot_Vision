@@ -97,41 +97,17 @@ end
 
 if plotr == 1    
     figure
-    subplot(1,2,1);imshow(I);title('RGB image with background substracted');
-    subplot(1,2,2);imshow(Ib);title('Image with desired block');
+    imshow(I);
+    title('RGB image with background substracted');
+    figure
+    imshow(Ib);
+    title('Image with desired block');
 end
 
 %% Edge detection using Canny method
 Ie = edge(Ib,'Canny',[],4);             % image with edges
-%% NEW STUFF 1
-BW = bwlabel(Ie,8); % region labeling
-infoB = regionprops(BW,'centroid','area'); % structure with block info
-block = [cat(1, infoB.Area) cat(1, infoB.Centroid)]; 
-[~, k] = max(block(:,1)); % find max area in the image 
-pxy = block(k,2:3); % relate the area to the center pixel values
 
-row=1;
-Islope = double(Ie);
-for i=2:size(BW,1)-1
-    for j=2:size(BW,2)-1
-        if BW(i,j) ~= k && BW(i,j) ~= 0
-            Islope(i,j) = 0;
-        end
-        
-        if BW(i,j) == k
-            t(row,:)=[i j];
-            row=row+1;
-        end 
-    end
-end
-%%
-if plotr == 1
-    figure
-    subplot(1,2,1);imshow(Ib);title('Detected color block');
-    subplot(1,2,2);imshow(Ie);title('Blocks with edges');
-end
-
-%% Find block center and area in the image (pixels)
+%% POSITION DETECTION: Find block center and area in the image (pixels)
 
 Im = imfill(Ie,'holes');    % fill the image with edges
 BW = bwlabel(Im,8);         % region labeling
@@ -141,10 +117,18 @@ block = [cat(1, infoB.Area) cat(1, infoB.Centroid)];
 pxy = [block(k,2) block(k,3)]; % pixel values on the crop 
 Areas = [infoB.Area];
 I_block = bwareaopen(Im,max(Areas));
-imshowpair(Im,I_block)
+% Reconstruct from Ie
+Ie = edge(I_block,'Canny',[],4);             % image with edges
+
+if plotr == 1
+    figure
+    imshow(Ib);title('Detected color block');
+    figure()
+    imshow(Ie);title('Blocks with edges');
+end
 
 %% NEW STUFF
-[erow, ecolumn] = find(Islope==1);
+[erow, ecolumn] = find(Ie==1);
 norms = zeros(length(erow),1);
 
 for i=1:length(erow)
@@ -194,12 +178,6 @@ b1 = pxy(1)-slopecenter1*pxy(2);
 slopecenter2 = (pxy(1)-coordtest(index2,2))/(pxy(2)-coordtest(index2,1));
 b2 = pxy(1)-slopecenter2*pxy(2);
 
-%PLOT
-figure
-hold on
-scatter(pxy(2),pxy(1), 'x','k');
-hold on
-scatter(coordtest(:,1),coordtest(:,2), 'x','k');
 
 k=1;
 clear points;
@@ -214,15 +192,15 @@ for i=1:length(erow)
     
 end
 
-%figure
-hold on
-scatter(points(:,1),points(:,2), 'x','b');
-hold on
-scatter(pxy(2),pxy(1), 'x','k');
-hold on
-scatter(coordtest(:,1),coordtest(:,2), 'x','k');
-
-slope=polyfit(points(:,1),points(:,2),1);
+%PLOT
+% figure
+% hold on
+% scatter(pxy(2),pxy(1), 'x','k');
+% scatter(coordtest(:,1),coordtest(:,2), 'x','k');
+% scatter(points(:,1),points(:,2), 'x','b');
+% scatter(pxy(2),pxy(1), 'x','k');
+% scatter(coordtest(:,1),coordtest(:,2), 'x','k');
+% slope=polyfit(points(:,1),points(:,2),1);
 
 for i=1:length(coordtest) 
     vecnew(:,i) = Proj\(w_og*[[coordtest(i,1) coordtest(i,2)]'; 1]); 
@@ -237,12 +215,14 @@ end
 vec5 = Proj\(w_og*[[pxy(2) pxy(1)]'; 1]); 
 r_5 = Trans_mat*vec5; 
 
-figure
-scatter(r_points(1,:),r_points(2,:), 'x','g');
-hold on
-scatter(r_new1(1,:),r_new1(2,:), 'x','k');
-hold on
-scatter(r_5(1),r_5(2), 'x','r');
+if plotr == 1
+    figure
+    scatter(r_points(1,:),r_points(2,:), 'x','g');
+    hold on
+    scatter(r_new1(1,:),r_new1(2,:), 'x','k');
+    hold on
+    scatter(r_5(1),r_5(2), 'x','r');
+end
 
 finalissimo = polyfit(r_points(1,:),r_points(2,:),1);
 angle = atand(finalissimo(1));

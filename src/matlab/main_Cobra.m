@@ -53,7 +53,7 @@ fprintf('Input either the name of the character or its respective letter of the 
 prompt = 'A) Homer\nB) Marge\nC) Bart\n\nYour answer: ';
 
 % usrIn = input(prompt,'s');
-usrIn = 'C';
+usrIn = '';
 if (strcmp(usrIn,'homer') || strcmp(usrIn,'A') || strcmp(usrIn,'a'))
     fprintf('\nYou chose: A) Homer\n');
     build = STR_HOMER;
@@ -150,40 +150,33 @@ for i = 1:length(build)
     w_coord = [w_coordx; w_coordy; 1];
     
     r_coord = [Trans_mat]*[w_coord];
-    offsety = 6;
-    offsetx = -1;
-    offset_rot = 7;
-    
-    %% Plotting Image and Coordinates
-    if plotr == 1
-        figure();
-        iptsetpref('ImshowAxesVisible','on');
-        imshow(img_curr,'XData',[0 size(img_curr,2)], 'YData', [0 size(img_curr,1)]);
-        hold on;
-        grid on;
-        grid minor;
-        scatter(img_og(1),img_og(2),'rx');
-        scatter(img_cur(1),img_cur(2),'bx');
-        scatter(img_cul(1),img_cul(2),'yx');
-        scatter(img_cdl(1),img_cdl(2),'cx');
-    end
-    
-    % Print Coordinates
+%     offsety = 6;
+%     offsetx = -1;
+%     offset_rot = 7;
+    offsety = 0;
+    offsetx = 0;
+    offset_rot = 0;
+
+    %% Print Coordinates
     fprintf('Image Coordinates: X: %.4f Y: %.4f R: %.4f degrees\n',img_coord(1),img_coord(2),rot_angle);
     fprintf('World Coordinates: X: %.4f Y: %.4f\n', w_coord(1),w_coord(2));
     fprintf('Robot Coordinates: X: %.4f Y: %.4f\n', r_coord(1),r_coord(2));
     
     %% MOVEMENT
-    % GRIPPING
-    % Z = 204
-    % GROUND 1st piece -> 188
-    % GROUND 2st piece -> 205.65
-    % GROUND 3st piece -> 224.5
     
-    % ON THE FLY
-    % GROUND 1st piece -> meh
-    % GROUND 2st piece -> 222.153 up to 260   
-    % GROUND 3st piece -> 241 up to 260
+    %**************************************************************************
+    % Z VALUES:
+    %   Not on the fly:
+    %   1st piece -> 188
+    %   2st piece -> 205.65
+    %   3st piece -> 224.5
+    %
+    %   On the fly
+    %   1st piece -> 188
+    %   2nd piece -> 222.153 up to 260   
+    %   3st piece -> 241 up to 260
+    %**************************************************************************
+    
     fprintf('Starting motion of the robot...\n');
     
     %Making sure grapper is closed at the start
@@ -198,10 +191,10 @@ for i = 1:length(build)
         pause(0.1);
         r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle+offset_rot,300)
         pause(0.1);
-        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,205,0,180,rot_angle+offset_rot,20)
-        pause(0.1);
+        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,215,0,180,rot_angle+offset_rot,20)
+        pause();
         r.openGrapper
-        pause(2);
+        pause(0.1);
         r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle+offset_rot,300)
         pause(0.1);
         
@@ -235,7 +228,7 @@ for i = 1:length(build)
         r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,260,0,180,rot_angle+offset_rot,300)
         pause(0.1);
         if i == 1
-            r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,205,0,180,rot_angle+offset_rot,20)
+            r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,215,0,180,rot_angle+offset_rot,20)
             pause(0.1);
             r.openGrapper
             pause(0.1);
@@ -266,6 +259,8 @@ for i = 1:length(build)
             r.moveLinear(425,0,300,0,180,0,300)
             pause(0.1);
         end
+    else 
+        fprintf('WARNING: Movement of the robot cancelled!\n');
     end
          
     fprintf('Block done!\n\n');

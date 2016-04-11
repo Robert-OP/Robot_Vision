@@ -10,3 +10,4 @@ doc/*.tdo
 doc/*.fmt
 doc/*.bib
 doc/*.pdf
+doc/*.gz

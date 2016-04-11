@@ -1,1 +1,47 @@
-\chapter{Block recognition}\label{ch:block_recognition}
+
+\chapter{Block}\label{ch:block_recognition}
+
+
+In order to complete the block recognition part of our project, we had to go through 3 main steps, the background substraction, color recognition and edge detection.
+
+\begin{flushleft}
+Background substraction
+\end{flushleft}
+
+
+
+\begin{flushleft}
+Color recognition
+\end{flushleft}
+
+
+ 	Once the background substracted, we obtained the color of the blocks experimentaly by using the tool 'Pixel region' in Matlab. A color can be expressed with values between 0 and 255 for its primary colors, red, green and blue. Thus, for each block, we placed the 'Pixel region' tool on it to get a range for the RGB parameters.\par
+\begin{flushleft}
+Let's take an example with the yellow block.
+\end{flushleft} \par
+
+ 	\begin{figure}[hb]
+  \centering
+  \includegraphics[scale=0.3]{figures/Thres_Y_manualy2.png}
+  \caption[LABEL] {CAPTATION TEXT}
+\end{figure}
+Here the result by experiment gives us more or less a range of R = [], G = [] and B = []. These ranges are then used to check in a loop that every pixel of the image are within the RGB range.
+In the image below the pixels being in the RGB parameter are highlighted in white while the others are put into black. We can see that the 6 yellow blocks are detected. 
+However, the one on the left is partially detected. This is the consequence of the different lights in the robot cell. The RBG range was define on a block placed in zone of shadow (see the red arrow on the picture).
+\graphicspath{{figures/Thres_Y_bad2.png}}
+Thus, the color recognition was redefined taking into account the different light inside the robot cell. All the yellow blocks are now detected.
+\graphicspath{{figures/Thres_Y_good.png}}
+An other solution would have been to set up a source of light inside the cell to have more precise ranges for the colors resulting in more robust system.
+
+
+ \begin{flushleft}
+ Edge detection
+ \end{flushleft}
+ 
+	There is different methods to detect the edges in an image. To pick the best one for our application, we played around the Canny, log, Prewitt, Roberts, Sobel and zerocross methods and their parameters as the threshold, direction and the standard deviation of the filter.
+
+............(present here some of them? )
+
+As a result of the tests done, we chose to use the Canny method with a standard deviation of 5.
+
+...............(insert 4 pictures here? without sigma/ with 5/ with >/ with <)

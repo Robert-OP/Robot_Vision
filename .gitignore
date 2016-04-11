@@ -12,3 +12,4 @@ doc/*.bib
 doc/*.pdf
 doc/*.gz
 doc/*.thm
+doc/master-blx.bib

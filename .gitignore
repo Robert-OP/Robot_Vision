@@ -11,3 +11,4 @@ doc/*.fmt
 doc/*.bib
 doc/*.pdf
 doc/*.gz
+doc/*.thm

@@ -1,1 +1,43 @@
 \chapter{Camera calibration}\label{ch:calibration}
+
+In order to achieve the goal, the robot arm needs to be combined with a camera which will provide important information to detect the correct position of the bricks. However, the use of this camera demanded one calibration which was done with a checkerboard. This calibration was required in order to find the intrinsic and extrinsic parameters of the camera which were useful to make the transformations between frames. The calibration was also used to undistort the images taken by the camera which were used to detect the position of the blocks.
+
+The calibration of the camera was built based on the \textit{Camera Calibration Toolbox} using thirty different pictures of the checkerboard. In each image were selected four different corners (the first corner was the origin) and defined the size of the each square. This process was repeated in the same order for all pictures to be able to calibrate the camera. After selecting all the corners, it was necessary to calibrate the camera using the data colected from the pictures. The first step of this calibration computes a closed-form solution for the calibration parameters without considering the lens distortion. This step is followed by a nonlinear optimization which main goal is to minimize the total reprojection error over all the calibration parameters (intrinsic and extrinsic). This optimization is done iteratively based on the gradient descent method and, at the end, the result is a set of variables which describe every parameter. 
+
+In addition, the calibration result also show the errors associated with some variables which allows to understand the quality of the calibration. Moreover, using the plot of the errors provided by the calibration becomes easy to compare the error between pictures and, based on this information, some pictures were eliminated (the ones with the biggest error values). After eliminating the worst pictures, the image corners were recomputed automatically using the function \textit{Recomp. Corners} and then the \textit{Calibration} function was applied in order to get new parameters with a small error.
+
+Furthermore, the camera calibration was also used in the undistortion process to undistort the background image and the images with bricks. This process was essential to remove the deformation in the external areas and, thus, obtain the best position values of the blocks.
+
+Intrinsic and extrinsic parameters
+
+The parameters provided by the calibration of the camera can be used to make transformations between frames which is useful to calculate the correct position of the bricks. These parameters can be divided in two different parts: the intrinsic and the extrinsic. The intrinsic parameters are related to the camera, for instances, the position of the principal point, the skew parameter (is zero because the axis are orthogonal) and the focal length. Using these parameters it is possible to combine the coordinates in the camera frame with the ones in the picture (pixels). The extrinsic parameters are the ones responsible for the relation between the world coordinates and the camera coordinates.
+
+\begin{align} 
+\begin{bmatrix}
+    \textit{u} \\ 
+    \textit{v} \\
+    1 
+\end{bmatrix}
+=
+\begin{bmatrix}
+	\newcommand*\rfrac[2]{{}^{#1}\!/_{#2}}
+    \textit{f}\rfrac{X}{Z} \\
+    \newcommand*\rfrac[2]{{}^{#1}\!/_{#2}}
+    \textit{f}\rfrac{Y}{Z} \\
+    1
+\end{bmatrix}
+\end{align}
+
+\begin{align} 
+\begin{bmatrix}
+    \textit{u} \\ 
+    \textit{v} \\
+    \textit{w} \\ 
+\end{bmatrix}
+=
+\begin{bmatrix}
+    \textit{f}  & 0 & p_{x} & 0\\
+    0   &  \textit{f} & p_{y} & 0  \\
+    0 & 0 & 1 & 0 \\
+\end{bmatrix}
+\end{align}

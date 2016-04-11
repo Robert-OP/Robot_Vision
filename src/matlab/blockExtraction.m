@@ -21,7 +21,7 @@ function [pxy, rot_angle,Ib,Ie] = blockExtraction(colors, img_curr, img_bkg, ...
 %% COLOR THRESHOLD
 %        r_min  r_max g_min g_max b_min b_max    % block color
 if strcmp(colors,'g')
-    G  = [130   200   140   220   20    140 ];   % green
+    G  = [130   200   140   220   20    200 ];   % green
     color = G;
     colors = 'green';
 elseif strcmp(colors,'b')
@@ -82,6 +82,8 @@ for i=1:size(I,1)
     end
 end
 
+I_thresh = Ib;
+
 % Filter and Blur image 
 Ib = medfilt2(Ib,[2 2]);     % remove noise
 Ib = imgaussfilt(Ib, 2);     % blur - apply gauss filter
@@ -97,7 +99,7 @@ end
 
 %% POSITION DETECTION: Find block center and area in the image (pixels)
 
-Ie = edge(Ib,'Canny',[]);             % image with edges Canny method
+Ie = edge(Ib,'Canny',[],3);             % image with edges Canny method
 Im = imfill(Ie,'holes');    % fill the image with edges
 BW = bwlabel(Im,8);         % region labeling
 infoB = regionprops(BW,'centroid','area');  % structure with block info
@@ -107,7 +109,7 @@ pxy = [block(k,2) block(k,3)]; % pixel values on the crop
 Areas = [infoB.Area];
 I_block = bwareaopen(Im,max(Areas));
 % Reconstruct from Ie
-Ie = edge(I_block,'Canny',[]);             % image with edges
+Ie = edge(I_block,'Canny',[],3);             % image with edges
 
 %% NEW STUFF
 [erow, ecolumn] = find(Ie==1);
@@ -187,9 +189,10 @@ end
 vec5 = Proj\(w_og*[[pxy(2) pxy(1)]'; 1]); 
 r_5 = Trans_mat*vec5; 
 
+%% PLOTS
 if plotr == 1
-    fig = figure(2);
-    clf(fig);
+    fig1 = figure(1);
+    clf(fig1);
     
     subplot(3,2,1);
     imshow(img_curr);
@@ -200,38 +203,60 @@ if plotr == 1
     title('Original picture w/o background');
     
     subplot(3,2,3);
+    imshow(I_thresh);
+    title('Thresholded image');
+    
+    subplot(3,2,4);
     imshow(Ib);
     title('Extracted blocks');
     
-    subplot(3,2,4);
+    subplot(3,2,5);
     imshow(Ie);
     title('Only one block');
-    
-    subplot(3,2,5);
-    hold on;
-    scatter(pxy(2),pxy(1), 'x','k');
-    scatter(coordtest(:,1),coordtest(:,2), 'x','k');
-    scatter(points(:,1),points(:,2), 'x','b');
-    scatter(pxy(2),pxy(1), 'x','k');
-    scatter(coordtest(:,1),coordtest(:,2), 'x','k');
-    slope=polyfit(points(:,1),points(:,2),1);
-    title('Slope')
-    
+%     
+%     subplot(3,2,6);
+%     hold on;
+%     scatter(pxy(2),pxy(1), 'x','k');
+%     scatter(coordtest(:,1),coordtest(:,2), 'x','k');
+%     scatter(points(:,1),points(:,2), 'x','b');
+%     scatter(pxy(2),pxy(1), 'x','k');
+%     scatter(coordtest(:,1),coordtest(:,2), 'x','k');
+%     slope=polyfit(points(:,1),points(:,2),1);
+%     title('Slope')
+%     
     subplot(3,2,6);
     hold on;
     scatter(r_points(1,:),r_points(2,:), 'x','g');
     scatter(r_new1(1,:),r_new1(2,:), 'x','k');
     scatter(r_5(1),r_5(2), 'x','r');
     title('Slope')
+
+    fig2 = figure(2);
+    imshow(img_curr);
+    title('Original picture cropped');
+    imwrite(img_curr,'fig/crop_img.png');
     
-    figure(3)
+    fig3 = figure(3);
+    imshow(I);
+    title('Original picture w/o background');
+    imwrite(I,'fig/nobkg_img.png');
+    
+    fig4 = figure(4);
+    imshow(I_thresh);
+    title('Thresholded image');
+    imwrite(I_thresh,'fig/thresh_img.png');
+    
+    fig5 = figure(5);
     imshow(Ib);
     title('Extracted blocks');
+    imwrite(Ib,'fig/fill_img.png');
     
-    figure(4)
+    fig6 = figure(6);
     imshow(Ie);
     title('Only one block');
+    imwrite(Ie,'fig/chosen_img.png');
 end
+%% 
 
 finalissimo = polyfit(r_points(1,:),r_points(2,:),1);
 angle = atand(finalissimo(1));

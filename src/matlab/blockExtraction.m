@@ -21,7 +21,7 @@ function [pxy, rot_angle,Ib,Ie] = blockExtraction(colors, img_curr, img_bkg, ...
 %% COLOR THRESHOLD
 %        r_min  r_max g_min g_max b_min b_max    % block color
 if strcmp(colors,'g')
-    G  = [130   200   140   220   20    140 ];   % green
+    G  = [130   200   140   220   20    200 ];   % green
     color = G;
     colors = 'green';
 elseif strcmp(colors,'b')
@@ -97,7 +97,7 @@ end
 
 %% POSITION DETECTION: Find block center and area in the image (pixels)
 
-Ie = edge(Ib,'Canny',[]);             % image with edges Canny method
+Ie = edge(Ib,'Canny',[],3);             % image with edges Canny method
 Im = imfill(Ie,'holes');    % fill the image with edges
 BW = bwlabel(Im,8);         % region labeling
 infoB = regionprops(BW,'centroid','area');  % structure with block info
@@ -107,7 +107,7 @@ pxy = [block(k,2) block(k,3)]; % pixel values on the crop
 Areas = [infoB.Area];
 I_block = bwareaopen(Im,max(Areas));
 % Reconstruct from Ie
-Ie = edge(I_block,'Canny',[]);             % image with edges
+Ie = edge(I_block,'Canny',[],3);             % image with edges
 
 %% NEW STUFF
 [erow, ecolumn] = find(Ie==1);

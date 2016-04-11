@@ -35,10 +35,10 @@ close all;
 %% Global variables
 
 % Bottom to top
-DEF_COLOR = 'o';
+DEF_COLOR = 'b';
 STR_HOMER = 'bwy';      
-STR_MARGE = 'gyb';      
-STR_BART = 'boy';        
+STR_MARGE = 'byg';      
+STR_BART = 'yob';        
 STR_LISA = 'yoy';        
 STR_MAGGIE = 'by';
 
@@ -56,7 +56,8 @@ STR_MAGGIE = 'by';
 %**************************************************************************
 % Z POSITIONS
 Z_HOVER = 260;
-Z_PICK = 215;
+Z_PICK = 205;
+Z_NOT_PICK = 215;
 Z_BUILD_HOVER = 230;
 % Not on the fly
 Z1_BUILD_NF = 188;
@@ -77,22 +78,14 @@ VEL_MOVE = 500;
 VEL_PICK = 20;
 
 % OFFSET
-% First try
-offsety = 8.72;
-offsetx = -2.32;
-offset_rot = 9.74;
-% Second try
-% offsety2 = 7.28;
-% offsetx2 = -3.22;
-% offset_rot2 = 9.89;
-% % Third try
-% offsety = (offsety2 + offsety1)/2;
-% offsetx = (offsetx2 - offsetx1)/2;
-% offset_rot = (offset_rot1 + offset_rot2)/2;
+offsety = 9.8;
+offsetx = -2.5;
+offset_rot = 11.64;
+
 
 % OTHER
 plotr = 1;
-onthefly = 1;
+onthefly = -1;
 
 %% USER INTERFACE
 % Program starting
@@ -106,7 +99,7 @@ fprintf('Input either the name of the character or its respective letter of the 
 prompt = 'A) Homer\nB) Marge\nC) Bart\nD) Lisa\nE) Maggie\n\nYour answer: ';
 
 % usrIn = input(prompt,'s');
-usrIn = 'C';
+usrIn = '';
 if (strcmp(usrIn,'homer') || strcmp(usrIn,'A') || strcmp(usrIn,'a'))
     fprintf('\nYou chose: A) Homer\n');
     build = STR_HOMER;
@@ -133,19 +126,29 @@ fprintf('#######################################################################
 fprintf('Loading intrinsic and extrinsic parameters...\n');
 load Calib_Results.mat;
 load extrinsic.mat
+load fig_calib/cameraParams.mat;
 img_chess = rgb2gray(imread('fig_calib/calib1.tif'));
 img_bkg = imread('fig_calib/background.tif');
+img_bkg = undistortImage(img_bkg,cameraParams);
 
-%Move robot to center (NOT ORIGEN)
-fprintf('Moving robot to initial position...\n');
-% r.closeGrapper
-% pause(0.5);
-r.moveLinear(X_CENTER,Y_CENTER,Z_CENTER,0,180,ANG_CENTER,VEL_MOVE)
-pause(0.5);
+if (onthefly == 0 || onthefly == 1)
+    %Move robot to center (NOT ORIGEN)
+    fprintf('Moving robot to initial position...\n');
+    r.closeGrapper
+    pause(0.5);
+    r.moveLinear(X_CENTER,Y_CENTER,Z_CENTER,0,180,ANG_CENTER,VEL_MOVE)
+    pause(0.5);
+end
 
-fprintf('Taking picture of the current workspace...\n');
-img_curr = snapshot(cam(1));
-imwrite(img_curr,'fig_calib/current.TIF');
+% NORMAL PROGRAM
+% fprintf('Taking picture of the current workspace...\n');
+% img_curr = snapshot(cam(1));
+% img_curr = undistortImage(img_curr,cameraParams);
+% imwrite(img_curr,'fig_calib/current.TIF');
+
+% USING FIGURE ALREADY TAKEN
+fprintf('Reading picture of the current workspace...\n');
+img_curr = imread('fig_calib/current.TIF');
 
 % Extrinsic and Intrinsic Matrices are used to change the coordinate
 % systems
@@ -234,14 +237,17 @@ for i = 1:length(build)
     
     % NOT ON THE FLY
     if onthefly == 0
-%         r.closeGrapper
-%         pause(0.1);
-        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,Z_HOVER,0,180,rot_angle+offset_rot,VEL_MOVE)
+        r.closeGrapper
         pause(0.1);
-        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,Z_PICK,0,180,rot_angle+offset_rot,VEL_PICK)
+        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,Z_HOVER,0,180,rot_angle+offset_rot,VEL_MOVE)
+        pause(0.1)
+        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,Z_NOT_PICK,0,180,rot_angle+offset_rot,VEL_MOVE)
+        fprintf('SECURITY PROTOCOL: Press enter to pick the block up.');
         pause();
-%         r.openGrapper
-%         pause(0.1);
+        r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,Z_PICK,0,180,rot_angle+offset_rot,VEL_PICK)
+        pause(0.1);
+        r.openGrapper
+        pause(0.1);
         r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,Z_HOVER,0,180,rot_angle+offset_rot,VEL_MOVE)
         pause(0.1);
         
@@ -263,8 +269,8 @@ for i = 1:length(build)
             pause(0.1);
         end
         
-%         r.closeGrapper
-%         pause(0.1);
+        r.closeGrapper
+        pause(0.1);
         
         %Move robot to center (NOT ORIGEN)
         r.moveLinear(X_CENTER,Y_CENTER,Z_CENTER,0,180,ANG_CENTER,VEL_MOVE)
@@ -277,8 +283,8 @@ for i = 1:length(build)
         if i == 1
             r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,Z_PICK,0,180,rot_angle+offset_rot,VEL_PICK)
             pause(0.1);
-%             r.openGrapper
-%             pause(0.1);
+            r.openGrapper
+            pause(0.1);
         elseif i == 2
             r.moveLinear(r_coord(1)+offsetx,r_coord(2)+offsety,Z2_BUILD_OF,0,180,rot_angle+offset_rot,VEL_PICK)
             pause(0.1);
@@ -299,8 +305,8 @@ for i = 1:length(build)
             %Drops the figure
             r.moveLinear(X_CENTER,Y_CENTER,Z3_BUILD_NF,0,180,ANG_CENTER,VEL_PICK)
             pause(0.1);
-%             r.closeGrapper
-%             pause(0.1);
+            r.closeGrapper
+            pause(0.1);
         
             %Move robot to center (NOT ORIGEN)
             r.moveLinear(X_CENTER,Y_CENTER,Z_CENTER,0,180,ANG_CENTER,VEL_MOVE)

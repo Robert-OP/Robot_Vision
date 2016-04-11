@@ -35,7 +35,7 @@ close all;
 %% Global variables
 
 % Bottom to top
-DEF_COLOR = 'b';
+DEF_COLOR = 'g';
 STR_HOMER = 'bwy';      
 STR_MARGE = 'byg';      
 STR_BART = 'yob';        
@@ -99,7 +99,7 @@ fprintf('Input either the name of the character or its respective letter of the 
 prompt = 'A) Homer\nB) Marge\nC) Bart\nD) Lisa\nE) Maggie\n\nYour answer: ';
 
 % usrIn = input(prompt,'s');
-usrIn = '';
+usrIn = 'B';
 if (strcmp(usrIn,'homer') || strcmp(usrIn,'A') || strcmp(usrIn,'a'))
     fprintf('\nYou chose: A) Homer\n');
     build = STR_HOMER;
@@ -131,7 +131,7 @@ img_chess = rgb2gray(imread('fig_calib/calib1.tif'));
 img_bkg = imread('fig_calib/background.tif');
 img_bkg = undistortImage(img_bkg,cameraParams);
 
-if (onthefly == 0 || onthefly == 1)
+if (onthefly ~= 0 && onthefly ~=1)
     %Move robot to center (NOT ORIGEN)
     fprintf('Moving robot to initial position...\n');
     r.closeGrapper

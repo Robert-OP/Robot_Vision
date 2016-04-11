@@ -192,7 +192,7 @@ r_5 = Trans_mat*vec5;
 %% PLOTS
 if plotr == 1
     fig1 = figure(1);
-    clf(fig1);
+    clf(fig);
     
     subplot(3,2,1);
     imshow(img_curr);
@@ -234,27 +234,22 @@ if plotr == 1
     fig2 = figure(2);
     imshow(img_curr);
     title('Original picture cropped');
-    imwrite(img_curr,'fig/crop_img.png');
     
-    fig3 = figure(3);
+    fig3 = figure(3)
     imshow(I);
     title('Original picture w/o background');
-    imwrite(I,'fig/nobkg_img.png');
     
     fig4 = figure(4);
     imshow(I_thresh);
     title('Thresholded image');
-    imwrite(I_thresh,'fig/thresh_img.png');
     
-    fig5 = figure(5);
+    fig5 = figure(5)
     imshow(Ib);
     title('Extracted blocks');
-    imwrite(Ib,'fig/fill_img.png');
     
-    fig6 = figure(6);
+    fig6 = figure(6)
     imshow(Ie);
     title('Only one block');
-    imwrite(Ie,'fig/chosen_img.png');
 end
 %% 
 

@@ -20,18 +20,41 @@ Color recognition
 Let's take an example with the yellow block.
 \end{flushleft} \par
 
- 	\begin{figure}[hb]
+\begin{figure}[hb]
   \centering
   \includegraphics[scale=0.3]{figures/Thres_Y_manualy2.png}
   \caption[LABEL] {CAPTATION TEXT}
 \end{figure}
-Here the result by experiment gives us more or less a range of R = [], G = [] and B = []. These ranges are then used to check in a loop that every pixel of the image are within the RGB range.
-In the image below the pixels being in the RGB parameter are highlighted in white while the others are put into black. We can see that the 6 yellow blocks are detected. 
-However, the one on the left is partially detected. This is the consequence of the different lights in the robot cell. The RBG range was define on a block placed in zone of shadow (see the red arrow on the picture).
-\graphicspath{{figures/Thres_Y_bad2.png}}
+
+Here the result by experiment gives us more or less a range of R = [], G = [] and B = [] for the RGB parameter. This parameter is then used to check in a loop that every pixel of the image are within the ranges.\par
+In the image below the pixels being in the RGB parameter are highlighted in white while the others are put into black. 
+
+\begin{figure}[hb]
+  \centering
+  \includegraphics[scale=0.3]{figures/Thres_Y_bad2.png}
+  \caption[LABEL] {CAPTATION TEXT}
+\end{figure}
+  
+\begin{flushleft}
+We can see that the 6 yellow blocks are detected. However, the one on the left is partially detected. This is the consequence of the different lights in the robot cell. The RBG range was define on a block placed in zone of shadow (see the red arrow on the picture).
+\end{flushleft}  
+\par
+
+\begin{flushleft}
 Thus, the color recognition was redefined taking into account the different light inside the robot cell. All the yellow blocks are now detected.
-\graphicspath{{figures/Thres_Y_good.png}}
+\end{flushleft}
+
+
+\begin{figure}[hb]
+  \centering
+  \includegraphics[scale=0.3]{figures/Thres_Y_good.png}
+  \caption[LABEL] {CAPTATION TEXT}
+\end{figure}
+
+\begin{flushleft}
 An other solution would have been to set up a source of light inside the cell to have more precise ranges for the colors resulting in more robust system.
+\end{flushleft}
+
 
 
  \begin{flushleft}

@@ -21,7 +21,7 @@ function [pxy, rot_angle,Ib,Ie] = blockExtraction(colors, img_curr, img_bkg, ...
 %% COLOR THRESHOLD
 %        r_min  r_max g_min g_max b_min b_max    % block color
 if strcmp(colors,'g')
-    G  = [130   200   140   220   20    200 ];   % green
+    G  = [60    100   110   180   80    140 ];   % green
     color = G;
     colors = 'green';
 elseif strcmp(colors,'b')
@@ -33,7 +33,7 @@ elseif strcmp(colors,'y')
     color = Y;
     colors = 'yellow';
 elseif strcmp(colors,'o')
-    O  = [220   240   60    180   0     150 ];   % orange
+    O  = [220   240   110   170   5     125 ];   % orange
     color = O;
     colors = 'orange';
 elseif strcmp(colors,'w')
@@ -52,7 +52,7 @@ imgF = medfilt2(imgG,[5 5]);
 bkgF = medfilt2(bkgG,[5 5]);
 
 % Substracting Background
-TH = 20;     % threshold to substract background
+TH = 8;     % threshold to substract background
 img_curr = imcrop(img_curr,[900 400 800 600]);
 I = img_curr;     
 for i=1:size(imgG,1)

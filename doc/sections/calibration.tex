@@ -1,12 +1,12 @@
 \chapter{Camera calibration}\label{ch:calibration}
 
-In order to achieve the goal, the robot arm needs to be combined with a camera which will provide important information to detect the correct position of the bricks. However, the use of this camera demanded a calibration which was done with a checkerboard. This calibration was essential in order to find the intrinsic and extrinsic parameters of the camera which were useful to make some transformations between frames. Besides, the calibration was also used to undistort images taken by the camera which were used to detect the position of the blocks.
+In order to carry out the project, the robot arm was acompained by a camera that provided the necessary information to determine the position of the bricks. However, the use of this camera required a calibration process which was done by means of a checkerboard. This step was essential in order to find the intrinsic and extrinsic parameters of the camera, which were main tool to perform transformations between frames. Additionally, these paramters were also used to undistort the images taken by the camera and reduce the "fish-eye" effect that the camera might include.
 
-The calibration of the camera was performed using the \textit{Camera Calibration Toolbox} and it was based on thirty different pictures of the checkerboard. In each image, four different corners were selected (the first corner was the origin) as well as defined the size of the each square. This process was repeated in the same order for all pictures to be able to calibrate the camera. After selecting all the corners, it was necessary to calibrate the camera using the data colected from the pictures. The first step of this calibration computes a closed-form solution for the calibration parameters without considering the lens distortion. This step is followed by a nonlinear optimization where the main goal is to minimize the total reprojection error over all the calibration parameters (intrinsic and extrinsic). This optimization is done iteratively based on the gradient descent method and, at the end, the result is a set of variables which describe every parameter. 
+The calibration of the camera was performed using the \textit{Camera Calibration Toolbox} for MATLAB. The process was based on thirty pictures from different angles of the checkerboard. In each image, four different corners were selected (the first corner was the origin) as well as defining the size of various squares. This process was repeated in the same order for every picture and all this data collected in a matlab file. The first step of this calibration computes a closed-form solution for the calibration parameters without considering the lens distortion. This step is followed by a nonlinear optimization where the main goal is to minimize the total reprojection error over all the calibration parameters, both intrinsic and extrinsic. This procedure is done iteratively based on the \textit{gradient descent method} and, finally, the result is a set of variables describing the camera characteristics. 
 
-In addition, the calibration results also show the errors associated with some variables which allow to understand the quality of the calibration. Moreover, using the plot of the errors provided by the calibration, it becomes easy to compare the error between pictures and, based on this information, some pictures were eliminated (the ones with the biggest error values). After eliminating the worst pictures, the image corners were recomputed automatically using the function \textit{Recomp. Corners} and then the \textit{Calibration} function was applied in order to get new parameters with a small error.
+In addition, the calibration results also show the errors associated with some variables allowing us to evaluate the quality of the calibration. Moreover, based on the plot of the errors provided by the calibration, some pictures were removed from the calibration pictures pool (the ones with the biggest error values). After eliminating the worst pictures, the image corners were recomputed automatically using the function \textit{Recomp. Corners} and then the \textit{Calibration} function was applied once again in order to get new parameters with an even smaller error.
 
-Furthermore, the camera calibration was also used in the undistortion process to undistort the background image and the images with bricks. This process was essential to remove the deformation in the external areas and, thus, obtain the best position values of the blocks. \par
+As mentioned above, the camera calibration was also used to undistort the background image and the pictures of the workspace. This process was essential to remove the deformation in the external areas and, thus, obtain the best position values of the blocks. \par
 
 
 \subsection*{Intrinsic and Extrinsic Parameters}
@@ -60,7 +60,7 @@ The parameters provided by the calibration of the camera can be used to make tra
 \end{bmatrix}
 \end{align}
 
-Based on the relations between frames, it is possible to simplify the calculations associating the image coordinates with the world coordinates. The relation is made through a projective matrix ($3\times 4$ matrix) which is a result of the product between the intrinsic ($3\times 3$ matrix) and extrinsic ($3\times 4$ matrix) matrices.
+Based on the relations between frames, it is possible to simplify the calculations associating the image coordinates with the world coordinates. The relation is made through a \textit{Projective matrix} ($3\times 4$ matrix) which is a result of the product between the intrinsic ($3\times 3$ matrix) and extrinsic ($3\times 4$ matrix) matrices.
 
 \begin{align} 
 \begin{bmatrix}
@@ -89,7 +89,7 @@ Based on the relations between frames, it is possible to simplify the calculatio
 \end{bmatrix}
 \end{align}
 
-The projective matrix is a $3\times 4$ matrix which means that it is not invertible. However, it is possible to assume that \textit{Z} is always zero because the blocks are in the \textit{XY} plane and thus the third column of the projective matrix will be multiplied by zero. So, it is possible to ignore the third column of the projective matrix and the third row of the matrix with the world coordinates.
+The \textit{Projective matrix} is a $3\times 4$ matrix which means that it is not invertible. However, it is possible to assume that \textit{Z} is always zero because the blocks are in the \textit{XY} plane and thus the third column of the \textit{projective matrix} will be multiplied by zero. So, it is possible to ignore the third column of the \textit{projective matrix} and the third row of the matrix with the world coordinates.
 
 \begin{align} 
 \begin{bmatrix}

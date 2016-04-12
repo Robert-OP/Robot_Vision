@@ -41,6 +41,7 @@ STR_MARGE = 'gyb';
 STR_BART = 'boy';        
 STR_LISA = 'yoy';        
 STR_MAGGIE = 'by';
+New_block = 0;
 
 %**************************************************************************
 % Z VALUES:
@@ -89,7 +90,7 @@ offset_rot = 12.28;
 
 % OTHER
 plotr = 1;
-onthefly = 1;
+onthefly = -1;
 
 %% USER INTERFACE
 % Program starting
@@ -102,7 +103,7 @@ fprintf('Choose one character from The Simpsons series.\n');
 fprintf('Input either the name of the character or its respective letter of the list:\n');
 prompt = 'A) Homer\nB) Marge\nC) Bart\nD) Lisa\nE) Maggie\n\nYour answer: ';
 
-allFigures = 'A';
+allFigures = 'D';
 
 for k = 1: length(allFigures)
     % usrIn = input(prompt,'s');
@@ -126,6 +127,9 @@ for k = 1: length(allFigures)
         fprintf('\nWARNING: Empty or unrecognized request.\nAssuming default color...\n');
         build = DEF_COLOR;
     end
+    
+    % Reset color counter
+    colorVec = zeros(1,5);
     
     % Flip order of the blocks in on the fly (top to bottom)
     if onthefly == 1
@@ -152,14 +156,14 @@ for k = 1: length(allFigures)
     end
     
     % NORMAL PROGRAM
-    fprintf('Taking picture of the current workspace...\n');
-    img_curr = snapshot(cam(1));
-    img_curr = undistortImage(img_curr,cameraParams);
-    imwrite(img_curr,'fig_calib/current.TIF');
+%     fprintf('Taking picture of the current workspace...\n');
+%     img_curr = snapshot(cam(1));
+%     img_curr = undistortImage(img_curr,cameraParams);
+%     imwrite(img_curr,'fig_calib/current.TIF');
     
     % USING FIGURE ALREADY TAKEN
-    % fprintf('Reading picture of the current workspace...\n');
-    % img_curr = imread('fig_calib/current.TIF');
+    fprintf('Reading picture of the current workspace...\n');
+    img_curr = imread('fig_calib/current.TIF');
     
     % Extrinsic and Intrinsic Matrices are used to change the coordinate
     % systems
@@ -172,7 +176,6 @@ for k = 1: length(allFigures)
     Proj(:,3)=[];
     
     % WORLD - ROBOT Transformation Matrix
-    % FUCK THIS SHIT
     % theta_r = 0;
     % Trans_mat = [cos(theta_r)    -sin(theta_r)    0    266.672
     %              sin(theta_r)     cos(theta_r)    0    226.186
@@ -215,8 +218,8 @@ for k = 1: length(allFigures)
         %% Detecting color
         colors = build(i);
         fprintf('Detecting blocks by color in the workspace...\n');
-        [img_coord, rot_angle,Ib,Ie] = blockExtraction(colors,...
-            img_curr, img_bkg, Proj, w_og, Trans_mat, plotr);
+        [img_coord, rot_angle,Ib,Ie,colorVec] = blockExtraction(colorVec,...
+            colors,img_curr, img_bkg, Proj, w_og, Trans_mat, plotr);
         img_coordx = img_coord(1);
         img_coordy = img_coord(2);
         % img_coordx = img_og(1);

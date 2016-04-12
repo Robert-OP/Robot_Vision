@@ -1,19 +1,11 @@
 
-\chapter{Block}\label{ch:block_recognition}
+\chapter{Block recognition}\label{ch:block_recognition}
 
+In order to complete the block recognition part of our project, we had to go through 3 main steps, the background substraction, color and edge detection.
 
-In order to complete the block recognition part of our project, we had to go through 3 main steps, the background substraction, color recognition and edge detection.
+\section{Background substraction}
 
-\begin{flushleft}
-Background substraction
-\end{flushleft}
-
-
-
-\begin{flushleft}
-Color recognition
-\end{flushleft}
-
+\section{Color detection}
 
  	Once the background substracted, we obtained the color of the blocks experimentaly by using the tool 'Pixel region' in Matlab. A color can be expressed with values between 0 and 255 for its primary colors, red, green and blue. Thus, for each block, we placed the 'Pixel region' tool on it to get a range for the RGB parameters.\par
 \begin{flushleft}
@@ -57,10 +49,8 @@ An other solution would have been to set up a source of light inside the cell to
 
 
 
- \begin{flushleft}
- Edge detection
- \end{flushleft}
- 
+ \section{Edge detection}
+
 	There is different methods to detect the edges in an image. To pick the best one for our application, we played around the Canny, log, Prewitt, Roberts, Sobel and zerocross methods and their parameters as the threshold, direction and the standard deviation of the filter. \par
 
  \begin{flushleft}

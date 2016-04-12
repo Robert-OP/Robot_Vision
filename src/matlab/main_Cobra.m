@@ -35,7 +35,7 @@ close all;
 %% Global variables
 
 % Bottom to top
-DEF_COLOR = 'b';
+DEF_COLOR = 'y';
 STR_HOMER = 'bwy';      
 STR_MARGE = 'byg';      
 STR_BART = 'yob';        
@@ -85,7 +85,7 @@ offset_rot = 11.64;
 
 % OTHER
 plotr = 1;
-onthefly = -1;
+onthefly = 0;
 
 %% USER INTERFACE
 % Program starting
@@ -141,14 +141,14 @@ if (onthefly == 0 || onthefly == 1)
 end
 
 % NORMAL PROGRAM
-% fprintf('Taking picture of the current workspace...\n');
-% img_curr = snapshot(cam(1));
-% img_curr = undistortImage(img_curr,cameraParams);
-% imwrite(img_curr,'fig_calib/current.TIF');
+fprintf('Taking picture of the current workspace...\n');
+img_curr = snapshot(cam(1));
+img_curr = undistortImage(img_curr,cameraParams);
+imwrite(img_curr,'fig_calib/current.TIF');
 
 % USING FIGURE ALREADY TAKEN
-fprintf('Reading picture of the current workspace...\n');
-img_curr = imread('fig_calib/current.TIF');
+% fprintf('Reading picture of the current workspace...\n');
+% img_curr = imread('fig_calib/current.TIF');
 
 % Extrinsic and Intrinsic Matrices are used to change the coordinate
 % systems

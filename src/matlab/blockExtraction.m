@@ -1,4 +1,4 @@
-function [pxy, rot_angle,Ib,Ie] = blockExtraction(colors, img_curr, img_bkg, ...
+function [pxy, rot_angle,Ib,Ie,colorVec] = blockExtraction(colorVec,colors, img_curr, img_bkg, ...
     Proj, w_og, Trans_mat, plotr)
 %**************************************************************************
 %
@@ -21,25 +21,35 @@ function [pxy, rot_angle,Ib,Ie] = blockExtraction(colors, img_curr, img_bkg, ...
 %% COLOR THRESHOLD
 %        r_min  r_max g_min g_max b_min b_max    % block color
 if strcmp(colors,'g')
-    G  = [130   200   140   220   20    200 ];   % green
+    G  = [60    100   110   180   80    140 ];   % green
     color = G;
     colors = 'green';
+    currCount = colorVec(1);
+    colorVec = colorVec + [1 0 0 0 0];
 elseif strcmp(colors,'b')
     B  = [0     70    40    130   140   255 ];   % blue
     color = B;
     colors = 'blue';
+    currCount = colorVec(2);
+    colorVec = colorVec + [0 1 0 0 0];
 elseif strcmp(colors,'y')
     Y  = [220   255   205   255   0     200 ];   % yellow
     color = Y;
     colors = 'yellow';
+    currCount = colorVec(3);
+    colorVec = colorVec + [0 0 1 0 0];    
 elseif strcmp(colors,'o')
-    O  = [220   240   60    180   0     150 ];   % orange
+    O  = [220   240   110   170   5     125 ];   % orange
     color = O;
     colors = 'orange';
+    currCount = colorVec(4);
+    colorVec = colorVec + [0 0 0 1 0];   
 elseif strcmp(colors,'w')
     W  = [205   255   205   255   205   255 ];   % white
     color = W;
     colors = 'white';
+    currCount = colorVec(5);
+    colorVec = colorVec + [0 0 0 0 1];
 else
     fprintf('WARNING: ERROR NOT RECOGNIZED\n');
     color = 0;
@@ -52,7 +62,7 @@ imgF = medfilt2(imgG,[5 5]);
 bkgF = medfilt2(bkgG,[5 5]);
 
 % Substracting Background
-TH = 20;     % threshold to substract background
+TH = 8;     % threshold to substract background
 img_curr = imcrop(img_curr,[900 400 800 600]);
 I = img_curr;     
 for i=1:size(imgG,1)
@@ -99,17 +109,25 @@ end
 
 %% POSITION DETECTION: Find block center and area in the image (pixels)
 
-Ie = edge(Ib,'Canny',[],3);             % image with edges Canny method
-Im = imfill(Ie,'holes');    % fill the image with edges
-BW = bwlabel(Im,8);         % region labeling
+Ie = edge(Ib,'Canny',[],3);            % image with edges Canny method
+Im = imfill(Ie,'holes');               % fill the image with edges
+BW = bwlabel(Im,8);                    % region labeling
 infoB = regionprops(BW,'centroid','area');  % structure with block info
 block = [cat(1, infoB.Area) cat(1, infoB.Centroid)]; 
 [A, k] = max(block(:,1));              % find max area in the image   
-pxy = [block(k,2) block(k,3)]; % pixel values on the crop 
+pxy = [block(k,2) block(k,3)];         % pixel values on the crop 
 Areas = [infoB.Area];
-I_block = bwareaopen(Im,max(Areas));
+if currCount > 0
+    I_big = bwareaopen(Im,max(Areas)); 
+    [maxAreas,indMax] = max(Areas);
+    Areas(indMax) = [];
+    I_block = bwareaopen(Im,max(Areas));
+    I_block = I_block - I_big;
+else
+    I_block = bwareaopen(Im,max(Areas)); 
+end
 % Reconstruct from Ie
-Ie = edge(I_block,'Canny',[],3);             % image with edges
+Ie = edge(I_block,'Canny',[],3);       % image with edges
 
 %% NEW STUFF
 [erow, ecolumn] = find(Ie==1);

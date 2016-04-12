@@ -36,7 +36,7 @@ In the image below the pixels being in the RGB parameter are highlighted in whit
 \end{figure}
   
 \begin{flushleft}
-We can see that the 6 yellow blocks are detected. However, the one on the left is partially detected. This is the consequence of the different lights in the robot cell. The RBG range was define on a block placed in zone of shadow (see the red arrow on the picture).
+We can see that the 6 yellow blocks are detected. However, the one on the left is partially detected. This is the consequence of the different lights in the robot cell. The RBG range was define on a block placed in a zone of shadow (see the red arrow on the picture).
 \end{flushleft}  
 \par
 
@@ -61,10 +61,52 @@ An other solution would have been to set up a source of light inside the cell to
  Edge detection
  \end{flushleft}
  
-	There is different methods to detect the edges in an image. To pick the best one for our application, we played around the Canny, log, Prewitt, Roberts, Sobel and zerocross methods and their parameters as the threshold, direction and the standard deviation of the filter.
+	There is different methods to detect the edges in an image. To pick the best one for our application, we played around the Canny, log, Prewitt, Roberts, Sobel and zerocross methods and their parameters as the threshold, direction and the standard deviation of the filter. \par
 
-............(present here some of them? )
+ \begin{flushleft}
+	We chose to detect the edges based on the resulting image of the color recognition. Below can be seen the color recognition of the blue blocks.
+ \end{flushleft}
 
-As a result of the tests done, we chose to use the Canny method with a standard deviation of 5.
+	\begin{figure}[hb]
+  \centering
+  \includegraphics[scale=0.3]{figures/color_rec_zoom.png}
+  \caption[LABEL] {CAPTATION TEXT}
+\end{figure}	
+	
 
-...............(insert 4 pictures here? without sigma/ with 5/ with >/ with <)
+ \begin{flushleft}
+As seen on the picture above, the shapes of the blocks that we get from the color recognition are irregular and so will be the edges. Thus, we used the Canny method that allows us to choose a stantard deviation of its filter in order to smooth the irregularities of the shapes.\par 
+ \end{flushleft}
+
+\begin{flushleft}
+The default value of the deviation is $\sqrt{2}$, increasing the deviation will result in smoother lignes until getting a round shape.
+\end{flushleft}
+
+	\begin{figure}[hb]
+  \centering
+  \includegraphics[scale=0.5]{figures/Canny_sqrt2.png}
+  \caption[LABEL] {CAPTATION TEXT}
+\end{figure}	
+  	\begin{figure}[hb]
+  \centering
+  \includegraphics[scale=0.5]{figures/Canny_4.png}
+  \caption[LABEL] {CAPTATION TEXT}
+\end{figure}	
+  	\begin{figure}[hb]
+  \centering
+  \includegraphics[scale=0.5]{figures/Canny_10.png}
+  \caption[LABEL] {CAPTATION TEXT}
+\end{figure}	
+  	\begin{figure}[hb]
+  \centering
+  \includegraphics[scale=0.5]{figures/Canny_25.png}
+  \caption[LABEL] {CAPTATION TEXT}
+\end{figure}	
+	
+
+As a result of the tests done, we chose to use the Canny method with a standard deviation of 4, giving us smoother lignes but not too round corners in order to calculate its position.
+
+
+\begin{flushleft}
+ block reconstruction ?
+ \end{flushleft}

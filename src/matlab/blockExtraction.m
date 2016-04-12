@@ -114,8 +114,6 @@ Im = imfill(Ie,'holes');               % fill the image with edges
 BW = bwlabel(Im,8);                    % region labeling
 infoB = regionprops(BW,'centroid','area');  % structure with block info
 block = [cat(1, infoB.Area) cat(1, infoB.Centroid)]; 
-[A, k] = max(block(:,1));              % find max area in the image   
-pxy = [block(k,2) block(k,3)];         % pixel values on the crop 
 Areas = [infoB.Area];
 if currCount > 0
     I_big = bwareaopen(Im,max(Areas)); 
@@ -123,7 +121,14 @@ if currCount > 0
     Areas(indMax) = [];
     I_block = bwareaopen(Im,max(Areas));
     I_block = I_block - I_big;
+    BW2 = bwlabel(I_block,8);                   % region labeling
+    infoC = regionprops(BW2,'centroid','area'); % structure with block info
+    block = [cat(1, infoC.Area) cat(1, infoC.Centroid)];
+    [~, k] = max(block(:,1));              % find max area in the image   
+    pxy = [block(k,2) block(k,3)];         % pixel values on the crop 
 else
+    [~, k] = max(block(:,1));              % find max area in the image   
+    pxy = [block(k,2) block(k,3)];         % pixel values on the crop 
     I_block = bwareaopen(Im,max(Areas)); 
 end
 % Reconstruct from Ie

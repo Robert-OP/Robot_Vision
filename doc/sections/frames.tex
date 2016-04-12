@@ -1,14 +1,34 @@
 \chapter{Frames}\label{ch:frames}
-To transfer the coordinate from Robot to World coordinate some calculations are needed.
+A coordinate system is a reference framework that defines the position in either two- or three-dimensional space. In this chapter, the relationship between the coordinate system for the world and for the Cobra will be taken into account. A relationship between the robot and the world coordinates allows to go from the world coordinate to the robot. In figure \ref{fig:check_coordrobottoworld}, it is shown that the world coordinate is rotated and translated relative to the robot frame. 
 \begin{figure}[hb]
   \centering
-  \includegraphics[width=2in]{figures/coordrobottoworld.png}
-  \caption[Coordinates from robot to world] {Rotation and translation from Robot to World}
-  \label{fig:coordrobottoworld}
+  \includegraphics[width=5.8in]{figures/check_coordinate_robot_world.png}
+  \caption[Checkerboard and coordinate with robot to world] {Checkboard and coordinate with robot to world}
+  \label{fig:check_coordrobottoworld}
 \end{figure}
 
-The following equation:
+To transform the coordinate system from Robot to the World coordinates some calculations are needed. The following equation shows the relationship between the robot frame and the world frame.
 \begin{align*}
+\begin{bmatrix}
+x_r \\
+y_r \\
+z_r \\
+1 
+\end{bmatrix}
+= \underbrace{\begin{bmatrix}
+a & b & x & c \\
+d & e & x & f \\
+g & h & x & i 
+\end{bmatrix}}_{\text{R | T}}
+\begin{bmatrix}
+x_w \\
+y_w \\
+z_w\\
+1 
+\end{bmatrix}
+\end{align*}
+We assume that the z axis is on the same axis in both robot and world coordinate. Therefore the above equation can we written as: EVERY THING THAT WE ARE MEASURING ARE IN THE XY PLANE
+\begin{align}
 \begin{bmatrix}
 x_r \\
 y_r \\
@@ -18,130 +38,60 @@ y_r \\
 a & b & c \\
 d & e & f \\
 g & h & i 
-\end{bmatrix}}_{\text{}}
+\end{bmatrix}}_{\text{    R   | T}}
 \begin{bmatrix}
 x_w \\
 y_w \\
 1 
 \end{bmatrix}
-\end{align*}
-%Its just to maintain the order. 
-%
-%figure
-%one frame here and one frame here... Do the rotation here...
-%
-%Then we can find this equations...
-%
-%Translation matrix and rotation matrix... Now we have 9 unknowns we need 9 equations...
-\begin{align}
-Trans_{mat} = experimentalTrans();
+\label{eq:world_to_robot}
 \end{align}
 
-To calculate the hej matrix it is need to have 9 equations since we have 9 unknows. To create these 9 different equations we need 3 different coordinates in the robot and the world frame. The reason for 3 different coordinates is because every coordinate has both a x,y and z value. These coordinates is achieved by putting the robot manually at 3 different points and measuring the coordinate in the robot and world frame. The 9 different equations will then be:
+In order to find the coordinates $(x_r,y_r,z_r)$ in the robot frame, the matrix [R | T] and the coordinates in the world frame $(x_w,y_w,z_w)$ must be known. However, in this situation, only  the coordinates in the world frame were known. So, in order to find the robot coordinates in equation \ref{eq:world_to_robot}, the matrix [R | T] needs to be calculated. An easy way to find the solution of this issue would be to solve the [R | T] matrix as a system of equations. So that, if one point is known in the robot frame and in the world one, we will have three equations with nine unknowns. It is possible to observe these three equations with nine unknown between \ref{eq:system_of_equations1} and \ref{eq:system_of_equations2}.
+ 
+\begin{align}
+\label{eq:system_of_equations1}
+x_r &= a\cdot x_w + b\cdot y_w + c \\
+y_r &= d\cdot x_w + e\cdot y_w + f \\
+1 &= g\cdot x_w + h\cdot y_w + i
+\label{eq:system_of_equations2}
+\end{align}
+In order to solve this system, six more equations would be necessary to get the values of the [R | T] matrix. As a consequence, two more points would be essential to find nine different equations with nine unknown. 
+
+The coordinates in the robot and world frames are measured by putting the robot manually at three different positions. To find the values of these points in the robot frame, a checkerboard is used as shown in figure \ref{fig:check_coordrobottoworld}. 
+
+The origin (0,0) is already known and from that it is possible to choose other two different positions. When these points are found, the nine different equations can be solved. The values of these three points are:
+
+\begin{table}[h]
+\begin{tabular}{| c | c | c | c |}
+\hline
+   & Point 1 & Point 2 & Point 3 \\
+   \hline
+  World & 28*[-1\quad -1] & 28*[-1\quad 6] & 28*[5\quad 2] \\
+  Robot & [239.484\quad 198.714] & [233.953\quad 398.995]   & [408.578\quad 287.651] \\
+  \hline
+\end{tabular}
+\end{table}
+
+The 9 different equations will then be:
 \begin{align*} 
-x_r(p_1) &= a\cdot x_w(p_1) + b\cdot y_w(p_1) + c \\
-y_r(p_1) &= d\cdot x_w(p_1) + e\cdot y_w(p_1) + f \\
-1 &= g\cdot x_w(p_1) + h\cdot y_w(p_1) + k \\
-x_r(p_2) &= a\cdot x_w(p_2) + b\cdot y_w(p_2) + c\\
-y_r(p_2) &= d\cdot x_w(p_2) + e\cdot y_w(p_2) + f \\
-1 &= g\cdot x_w(p_2) + h\cdot y_w(p_2) + k \\
-x_r(p_3) &= a\cdot x_w(p_3) + b\cdot y_w(p_3) + c \\
-y_r(p_3) &= d\cdot x_w(p_3) + e\cdot y_w(p_3) + f \\
-1 &= g\cdot x_w(p_3) + h\cdot y_w(p_3) + k
+p_1(x_r) &= a\cdot p_1(x_w) + b\cdot p_1(y_w) + c \\
+p_1(y_r) &= d\cdot p_1(x_w) + e\cdot p_1(y_w) + f \\
+1 &= g\cdot p_1(x_w) + h\cdot p_1(y_w) + k \\
+p_2(x_r) &= a\cdot p_2(x_w) + b\cdot p_2(y_w) + c\\
+p_2(y_r) &= d\cdot p_2(x_w) + e\cdot p_2(y_w) + f \\
+1 &= g\cdot p_2(x_w) + h\cdot p_2(y_w) + k \\
+p_3(x_r) &= a\cdot p_3(x_w) + b\cdot p_3(y_w) + c \\
+p_3(y_r) &= d\cdot p_3(x_w) + e\cdot p_3(y_w) + f \\
+1 &= g\cdot p_3(x_w) + h\cdot p_3(y_w) + k
 \end{align*}
-And the points:
-Experimental Transformation matrix. The code is in appendix \ref{app:experimentaltrans}
+By solving these equations the [R | T] matrix is:
 \begin{align*}
-x1_w&=28*[-1\quad -1] x2_w&=28*[-1\quad 6]  x3_w&=28*[5\quad 2]\\
-x1_r&=[239.484\quad 198.714] x2_r&=[233.953\quad 398.995]   x3_r&=[408.578\quad 287.651]
+\text{(R|T)} = 
+\begin{bmatrix}
+1.0206 & -0.0282 & 267.2713 \\
+0.0185 & 1.0218 & 227.8426 \\
+0 & 0 & 1.0000 
+\end{bmatrix}
 \end{align*}
-Calculations using the origin to get the w (last value of the matrix Values)
-Origin
-\begin{lstlisting}
 
-img_og = Proj*[0;0;1];
-w_og = img_og(3);
-img_og = img_og/w_og;
-\end{lstlisting}
-Corners
-\begin{lstlisting}
-img_cur = Proj*[29*8;0;1];
-w_cur = img_cur(3);
-img_cur = img_cur/img_cur(3);
-img_cul = Proj*[29*8;29*5;1];
-w_cul = img_cul(3);
-img_cul = img_cul/img_cul(3);
-img_cdl = Proj*[0;29*5;1];
-w_cdl = img_cdl(3);
-img_cdl = img_cdl/img_cdl(3);
-\end{lstlisting}
-W term
-\begin{lstlisting}
-w = [w_og; w_cur; w_cul; w_cdl];
-% fprintf('Deviation (w): %f\n',w);
-\end{lstlisting}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%We need to use the checkerboard. We knew that this 0 was the origin and then choose 3 different points. 
-%From the gripper we found the robot coordinates and read from the screen...
-%
-%Then we solved the 9 equations and used 3 different points and we got the 9 equations and solved it... 
-%
-%We had the world coordinate and we needed the robot. And this was something that was difficult to do. And easy to do with 9 equations. We needed to give the value to the robot to tell it to go the specific position. We needed to build some relationship between the world and the robot and as you can see in this frame you have this coordinate and in this frame you have this coordiante. 
-%
-%By doing this we can find the transformation from the world to the robot.
-%
-%extrinsic
-%\begin{align}
-%\text{extrinsic} = 
-%\begin{bmatrix}
-%    \text{Rc\_ext} & \text{Tc\_ext} 
-%\end{bmatrix}
-%\end{align}
-%Extrinsic and Intrinsic Matrices are used to change the coordinate systems
-%Intrinsic
-%\begin{align}
-%\text{KK} &= 
-%\begin{bmatrix}
-%    1666.6 & 0 & 1153.2 \\
-%    0 & 1666.2 & 750.4 \\
-%    0 & 0 & 1 
-%\end{bmatrix} \\
-%\text{intrinsic} &= \text{KK}
-%\end{align}
-%Projection
-%\begin{align}
-%\text{Proj} = \text{intrinsic}*\text{extrinsic}; 
-%\end{align}
-%We can ignore the third column because the Z coordinate is always zero. So we will have a 3x3 matrix and we will be able to inverse it.
-%\begin{align}
-%\text{Proj(:,3)}=[];
-%\end{align}
-%World - Robot Transformation Matrix
-%\begin{align}
-%\text{Trans\_mat} = 
-%\begin{bmatrix}
-%    cos(\theta_r) & -sin(\theta_r) & 0 & 266.672 \\
-%    sin(\theta_r)  & cos(\theta_r) & 0 & 226.186 \\
-%        0         &      0         & 1 &    0 
-%\end{bmatrix}
-%\end{align}
-%

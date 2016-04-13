@@ -1,7 +1,7 @@
 \chapter{Hardware setup}\label{ch:hardware}
-In order to connect to the camera and the robot, a personal workstation has been used. Most of the time spent by our group was in the Robotics laboratory, where we worked and tested the ADEPT Cobra robot. We placed the camera inside the robot cell, above the blocks, such that we take images from the top. Such an image will allow us to efficiently determine the positions and orientations of the blocks. 
+A personal computer has been used to connect with the camera and the robot. The camera was placed inside the robot cell, above the blocks, such that the images were taken from above. This cenital point of allows to efficiently determine the positions and orientations of the blocks. 
 
-The phisical connections to the workstation were made through: 
+The phisical connections to the computer were made through: 
 \begin{itemize}
 	\item Ethernet to the robot  
 	\item USB to the camera 
@@ -14,4 +14,4 @@ The phisical connections to the workstation were made through:
 {An illustration of the hardware setup}
 \end{figure}
 
-A local computer with Windows XP runs the ADEPT Desktop program in order to control the robot. This computer is connected to a switch nearby and has a static IP. Thus, we take advantage of that by connecting our workstation to that switch through an Ethernet cable, such that we can connect to the ADEPT Desktop. Doing so we are able to communicate with the robot and using Matlab we can send commands to it. Regarding the camera, we have installed the webcam package in order to properly connect and use it. 
+In order to connect between the different components described above, a local network was set up in which both the computer and the Adept cobra controller were given an static IP. This computer runs the ADEPT Desktop program that was used to send the program code to the robot. This configuration allowed us to communicate with the robot and send Matlab commands to it. MATLAB also includes a camera toolbox to work with it. 

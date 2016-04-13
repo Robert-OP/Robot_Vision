@@ -16,7 +16,7 @@ A coordinate system is a reference framework that defines the position in either
 \caption{Title for both}
 \end{figure}
 
-The following equation shows the relationship between the robot frame and the world frame.
+The following equation shows the relationship between the robot frame and the world frame. It is assumed that the z axis is on the same axis in both robot and world coordinate, because the blocks lay on the XY plane. Therefore the following equation can we written as: 
 \begin{align*}
 \begin{bmatrix}
 x_r \\
@@ -35,14 +35,6 @@ y_w \\
 z_w\\
 1 
 \end{bmatrix}
-\end{align*}
-It is assumed that the z axis is on the same axis in both robot and world coordinate, because the blocks lay on the XY plane. Therefore the above equation can we written as: 
-\begin{align}
-\begin{bmatrix}
-x_r \\
-y_r \\
-1 
-\end{bmatrix}
 = \underbrace{\begin{bmatrix}
 a & b & c \\
 d & e & f \\
@@ -54,7 +46,8 @@ y_w \\
 1 
 \end{bmatrix}
 \label{eq:world_to_robot}
-\end{align}
+\end{align*}
+
 
 In order to find the coordinates $(x_r,y_r,z_r)$ in the robot frame, the matrix [R | T] and the coordinates in the world frame $(x_w,y_w,z_w)$ must be known. However, in this situation, only  the coordinates in the world frame were known, as calculated in the former chapter by means of the \textit{P} matrix. So, in order to find the robot coordinates in equation \ref{eq:world_to_robot}, the matrix [R | T] needs to be calculated. An easy way to find the solution of this issue would be to solve the [R | T] matrix as a system of equations. So that, if one point is known in the robot frame and in the world one, we will have three equations with nine unknowns as described in equations \ref{eq:system_of_equations1} to \ref{eq:system_of_equations2}.
  

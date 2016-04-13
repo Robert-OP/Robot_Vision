@@ -1,10 +1,19 @@
 \chapter{Frames}\label{ch:frames}
-A coordinate system is a reference framework that defines the position in either two- or three-dimensional space. In this chapter, the relationship between the coordinate system for the world and for the Cobra will be taken into account. A relationship between the robot and the world coordinates allows to go from the world coordinate to the robot. In figure \ref{fig:check_coordrobottoworld}, it is shown that the world coordinate is rotated and translated relative to the robot frame. 
+A coordinate system is a reference framework that defines the position in either two- or three-dimensional space. In this chapter, the relationship between the coordinate system for the world and for the Cobra will be taken into account. A relationship between the robot and the world coordinates allows to go from the world coordinate to the robot. In figure \ref{fig:sub-transformation}, it is shown that the world coordinate is rotated and translated relative to the robot frame. 
+%\begin{figure}[hb]
+%  \centering
+%  \includegraphics[width=3.5in]{figures/coordrobottoworld.png}
+%  \caption[Checkerboard and coordinate with robot to world] {Checkboard and coordinate with robot to world}
+%  \label{fig:check_coordrobottoworld}
+%\end{figure}
+
 \begin{figure}[hb]
-  \centering
-  \includegraphics[width=3in]{figures/coordrobottoworld.png}
-  \caption[Checkerboard and coordinate with robot to world] {Checkboard and coordinate with robot to world}
-  \label{fig:check_coordrobottoworld}
+\hfill
+\subfigure[From robot to world frame]{\includegraphics[width=5cm]{figures/coordrobottoworld.png}\label{fig:sub-transformation}}
+\hfill
+\subfigure[Checkerboard]{\includegraphics[width=5cm]{figures/pattern.png}\label{fig:sub-checkerboard}}
+\hfill
+\caption{Title for both}
 \end{figure}
 
 To transform the coordinate system from Robot to the World coordinates some calculations are needed. The following equation shows the relationship between the robot frame and the world frame.
@@ -58,14 +67,7 @@ y_r &= d\cdot x_w + e\cdot y_w + f \\
 \end{align}
 In order to solve this system, six more equations would be necessary to get the values of the [R | T] matrix. As a consequence, two more points would be essential to find nine different equations with nine unknown. 
 
-The coordinates in the robot and world frames are measured by putting the robot manually at three different positions. To find the values of these points in the robot frame, a checkerboard is used as shown in figure \ref{fig:checkerboard}. 
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=2in]{figures/pattern.png}
-  \caption[Checkerboard pattern] {Checkerboard pattern}
-  \label{fig:checkerboard}
-\end{figure}
+The coordinates in the robot and world frames are measured by putting the robot manually at three different positions. To find the values of these points in the robot frame, a checkerboard is used as shown in figure \ref{fig:sub-checkerboard}. 
 
 The origin (0,0) is already known and from that it is possible to choose other two different positions. When these points are found, the nine different equations can be solved. The values of these three points are:
 

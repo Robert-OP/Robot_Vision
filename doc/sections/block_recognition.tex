@@ -1,13 +1,19 @@
 
 \chapter{Block recognition}\label{ch:block_recognition}
 
-In order to complete the block recognition part of our project, we had to go through 3 main steps, the background substraction, color and edge detection.
+The block recognition part has been divided into 5 main steps: 
+\begin{itemize}
+  \item background substraction
+  \item color detection
+  \item edge detection
+  \item position
+  \item orientation
+\end{itemize}
 
 \section{Background substraction}
-As a first step we perform a background substraction, such that the gray area around the blocks is neglected and a proper color detection will be applied. Also, this deals with the uneven illumination in the images beneficial to a smoother edge detection. 
+As a first step a background substraction was performed, such that the gray area around the blocks is neglected and a proper color detection is applied. Also, this deals with the uneven illumination in the images which results in smoother edges. 
 
-\noindent 
-The procedure is done by means of substracting from the initial image the 2D median filtered of the same image as in Equation \ref{eq:rem_alg}. As an observation, in the case of the white block in Figure \ref{fig:rem_back}, the shape will be reconstructed after the edge detection. 
+This is done by substracting the 2D median filtered image from the initial one as in Equation \ref{eq:rem_alg}. As an observation, in the case of the white block seen in Figure \ref{fig:rem_back}, the shape will be reconstructed after the edge detection. 
 
 \begin{equation}\label{eq:rem_alg}
   \begin{cases}
@@ -16,7 +22,7 @@ The procedure is done by means of substracting from the initial image the 2D med
   \end{cases}
 \end{equation}
 
-\begin{figure}[hb]
+\begin{figure}[H]
   \centering
   \includegraphics[scale=0.5]{figures/remove_background.png}
   \caption{Camera image with background substracted}

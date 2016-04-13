@@ -31,102 +31,95 @@ This is done by substracting the 2D median filtered image from the initial one a
 
 \section{Color detection}
 
- 	Once the background substracted, we obtained the color of the blocks experimentaly by using the tool 'Pixel region' in Matlab. A color can be expressed with values between 0 and 255 for its primary colors, red, green and blue. Thus, for each block, we placed the 'Pixel region' tool on it to get a range for the RGB parameters.\par
-\begin{flushleft}
-Let's take an example with the yellow block.
-\end{flushleft} \par
+ 	Once the background is substracted, the color of the blocks is experimentally obtained by using the tool \textit{Pixel region} in MATLAB. A color can be described with values between 0 and 255 for its primary colors, red, green and blue. Thus, for each block, the \textit{Pixel region} tool has been placed on it to get a range for the RGB parameters.\par
+
+An example with the yellow block is given below
+\par
 
 \begin{figure}[hb]
   \centering
   \includegraphics[scale=0.3]{figures/Thres_Y_manualy2.png}
-  \caption[LABEL] {CAPTATION TEXT}
+  \caption[LABEL] {RGB selection}
+  \label{fig:color1}
 \end{figure}
 
-Here the result by experiment gives us more or less a range of R = [], G = [] and B = [] for the RGB parameter. This parameter is then used to check in a loop that every pixel of the image are within the ranges.\par
-In the image below the pixels being in the RGB parameter are highlighted in white while the others are put into black. 
+Figure \ref{fig:color1} gives us more or less a range for the RGB parameters. These parameters are then used to check in a loop (thresholding) that every pixel of the image are within the ranges.\par
+%In the image below the pixels being in the RGB parameter are highlighted in white while the others are put into black. 
 
 \begin{figure}[hb]
   \centering
   \includegraphics[scale=0.3]{figures/Thres_Y_bad2.png}
-  \caption[LABEL] {CAPTATION TEXT}
+  \caption[LABEL] {First attempt color thresholding}
+  \label{fig:color2}
 \end{figure}
   
-\begin{flushleft}
-We can see that the 6 yellow blocks are detected. However, the one on the left is partially detected. This is the consequence of the different lights in the robot cell. The RBG range was define on a block placed in a zone of shadow (see the red arrow on the picture).
-\end{flushleft}  
-\par
 
-\begin{flushleft}
-Thus, the color recognition was redefined taking into account the different light inside the robot cell. All the yellow blocks are now detected.
-\end{flushleft}
+In figure \ref{fig:color2}, the 6 yellow blocks are detected. However, the one on the left is partially detected. This is the consequence of the different lightings in the robot cell. The RBG range was defined on a block placed in a zone of shadow (see the red arrow on the picture). \par
+
+
+Thus, the color recognition was redefined taking into account the different lightings inside the robot cell. All the yellow blocks are now detected.
+
 
 
 \begin{figure}[hb]
   \centering
   \includegraphics[scale=0.3]{figures/Thres_Y_good.png}
-  \caption[LABEL] {CAPTATION TEXT}
+  \caption[LABEL] {Correct color thresholding}
 \end{figure}
 
-\begin{flushleft}
-An other solution would have been to set up a source of light inside the cell to have more precise ranges for the colors resulting in more robust system.
-\end{flushleft}
+An other solution would have been to set up a constant lighting inside the cell to have more precise ranges for the colors, resulting in a more robust system.
 
 
 
  \section{Edge detection}
 
-	There is different methods to detect the edges in an image. To pick the best one for our application, we played around the Canny, log, Prewitt, Roberts, Sobel and zerocross methods and their parameters as the threshold, direction and the standard deviation of the filter. \par
+	There are different methods to detect the edges in an image. To pick the best one for this application, different methods such as the Canny, log, Prewitt, Roberts, Sobel and zerocross were tested along with their parameters, the threshold, direction and the standard deviation of the filter. \par
 
- \begin{flushleft}
-	We chose to detect the edges based on the resulting image of the color recognition. Below can be seen the color recognition of the blue blocks.
- \end{flushleft}
+
+	The detection of the edges was based on the resulting image of the color recognition. Below can be seen the color recognition of the blue blocks.
 
 	\begin{figure}[hb]
   \centering
   \includegraphics[scale=0.3]{figures/color_rec_zoom.png}
-  \caption[LABEL] {CAPTATION TEXT}
+  \caption[LABEL] {Post color recognition step}
 \end{figure}	
 	
 
- \begin{flushleft}
-As seen on the picture above, the shapes of the blocks that we get from the color recognition are irregular and so will be the edges. Thus, we used the Canny method that allows us to choose a stantard deviation of its filter in order to smooth the irregularities of the shapes.\par 
- \end{flushleft}
 
-\begin{flushleft}
-The default value of the deviation is $\sqrt{2}$, increasing the deviation will result in smoother lignes until getting a round shape.
-\end{flushleft}
+As seen on the picture above, the shapes of the blocks that resulted from the color recognition step are irregular and so are be the edges. Thus, we used the Canny method that allows us to choose a stantard deviation of its filter in order to smooth the irregularities of the shapes.\par 
+
+
+
+The default value of the deviation is $\sqrt{2}$, increasing the deviation will result in smoother lines until getting a round shape.
 
 \begin{figure}[H]
 \hfill
-\subfigure[ASDF1]{
+\subfigure[Canny default]{
 \includegraphics[scale=0.5]{figures/Canny_sqrt2.png}
 \label{fig:subim11}}
 \hfill
-\subfigure[ASDF2]{
+\subfigure[Canny 4]{
 \includegraphics[scale=0.5]{figures/Canny_4.png}
 \label{fig:subim12}}
 \hfill
-\subfigure[ASDF3]{
+\subfigure[Canny 10]{
 \includegraphics[scale=0.5]{figures/Canny_10.png}
 \label{fig:subim12}}
 \hfill
-\subfigure[ASDF4]{
+\subfigure[Canny 25]{
 \includegraphics[scale=0.5]{figures/Canny_25.png}
 \label{fig:subim12}}
 \hfill
 
-\caption{ASDFASDFASDF}
+\caption{Canny edge detection method}
 
 \end{figure}
 
 
 
 
-As a result of the tests done, we chose to use the Canny method with a standard deviation of 4, giving us smoother lignes but not too round corners in order to calculate its position.
+As a result of the tests done, the Canny method with a standard deviation of 4 was the one chosen, giving us smoother lines but not too round corners in order to calculate its position.
 
 
-\begin{flushleft}
- block reconstruction ?
- \end{flushleft}
 
  \input{sections/position_rotation.tex}

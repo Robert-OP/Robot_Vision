@@ -1,5 +1,5 @@
 \chapter{Frames}\label{ch:frames}
-A coordinate system is a reference framework that defines the position in either two- or three-dimensional space. In this chapter, the relationship between the coordinate system for the world and for the Cobra will be taken into account. A relationship between the robot and the world coordinates allows to go from the world coordinate to the robot. In figure \ref{fig:sub-transformation}, it is shown that the world coordinate is rotated and translated relative to the robot frame. 
+A coordinate system is a reference framework that defines the position in either two- or three-dimensional space. In this chapter, the relationship between the coordinate system for the world and for the Cobra robot will be taken into account. In figure \ref{fig:sub-transformation}, it is shown that the world coordinate is rotated and translated with respect to the robot frame. 
 %\begin{figure}[hb]
 %  \centering
 %  \includegraphics[width=3.5in]{figures/coordrobottoworld.png}
@@ -16,7 +16,7 @@ A coordinate system is a reference framework that defines the position in either
 \caption{Title for both}
 \end{figure}
 
-To transform the coordinate system from Robot to the World coordinates some calculations are needed. The following equation shows the relationship between the robot frame and the world frame.
+The following equation shows the relationship between the robot frame and the world frame.
 \begin{align*}
 \begin{bmatrix}
 x_r \\
@@ -36,7 +36,7 @@ z_w\\
 1 
 \end{bmatrix}
 \end{align*}
-It is assumed that the z axis is on the same axis in both robot and world coordinate, because everything is measured in the XY plane. Therefore the above equation can we written as: 
+It is assumed that the z axis is on the same axis in both robot and world coordinate, because the blocks lay on the XY plane. Therefore the above equation can we written as: 
 \begin{align}
 \begin{bmatrix}
 x_r \\
@@ -56,13 +56,13 @@ y_w \\
 \label{eq:world_to_robot}
 \end{align}
 
-In order to find the coordinates $(x_r,y_r,z_r)$ in the robot frame, the matrix [R | T] and the coordinates in the world frame $(x_w,y_w,z_w)$ must be known. However, in this situation, only  the coordinates in the world frame were known. So, in order to find the robot coordinates in equation \ref{eq:world_to_robot}, the matrix [R | T] needs to be calculated. An easy way to find the solution of this issue would be to solve the [R | T] matrix as a system of equations. So that, if one point is known in the robot frame and in the world one, we will have three equations with nine unknowns. It is possible to observe these three equations with nine unknown between \ref{eq:system_of_equations1} and \ref{eq:system_of_equations2}.
+In order to find the coordinates $(x_r,y_r,z_r)$ in the robot frame, the matrix [R | T] and the coordinates in the world frame $(x_w,y_w,z_w)$ must be known. However, in this situation, only  the coordinates in the world frame were known, as calculated in the former chapter by means of the \textit{P} matrix. So, in order to find the robot coordinates in equation \ref{eq:world_to_robot}, the matrix [R | T] needs to be calculated. An easy way to find the solution of this issue would be to solve the [R | T] matrix as a system of equations. So that, if one point is known in the robot frame and in the world one, we will have three equations with nine unknowns. It is possible to observe these three equations with nine unknown between \ref{eq:system_of_equations1} and \ref{eq:system_of_equations2}.
  
 \begin{align}
 \label{eq:system_of_equations1}
-x_r &= a\cdot x_w + b\cdot y_w + c \\
-y_r &= d\cdot x_w + e\cdot y_w + f \\
-1 &= g\cdot x_w + h\cdot y_w + i
+x_r &= a\cdot x_w + b\cdot x_w + c \\
+y_r &= d\cdot x_w + e\cdot x_w + f \\
+1 &= g\cdot x_w + h\cdot x_w + i
 \label{eq:system_of_equations2}
 \end{align}
 In order to solve this system, six more equations would be necessary to get the values of the [R | T] matrix. As a consequence, two more points would be essential to find nine different equations with nine unknown. 

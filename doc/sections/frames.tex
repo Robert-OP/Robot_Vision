@@ -36,7 +36,7 @@ z_w\\
 1 
 \end{bmatrix}
 \end{align*}
-It is assumed that the z axis is on the same axis in both robot and world coordinate, becase everything is measured in the XY plane. Therefore the above equation can we written as: 
+It is assumed that the z axis is on the same axis in both robot and world coordinate, because everything is measured in the XY plane. Therefore the above equation can we written as: 
 \begin{align}
 \begin{bmatrix}
 x_r \\
@@ -96,11 +96,29 @@ p_3(y_r) &= d\cdot p_3(x_w) + e\cdot p_3(y_w) + f \\
 \end{align*}
 By solving these equations the [R | T] matrix is:
 \begin{align*}
-\text{(R|T)} = 
+\text{[R | T]} = 
 \begin{bmatrix}
 1.0206 & -0.0282 & 267.2713 \\
 0.0185 & 1.0218 & 227.8426 \\
 0 & 0 & 1.0000 
+\end{bmatrix}
+\end{align*}
+And now when the [R | T] matrix is found the relationship between the robot and world frame can be written as:
+\begin{align*}
+\begin{bmatrix}
+x_r \\
+y_r \\
+1 
+\end{bmatrix}
+= \underbrace{\begin{bmatrix}
+1.0206 & -0.0282 & 267.2713 \\
+0.0185 & 1.0218 & 227.8426 \\
+0 & 0 & 1.0000 
+\end{bmatrix}}_{\text{R | T}}
+\begin{bmatrix}
+x_w \\
+y_w \\
+1 
 \end{bmatrix}
 \end{align*}
 

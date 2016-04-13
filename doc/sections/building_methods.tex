@@ -1,1 +1,27 @@
 \chapter{Building methods}\label{ch:building_methods}
+
+Two different approaches for building the figures have been addressed on the project. They will be refered through the text as \textit{"On the fly"} and \textit{Regular"} construction.
+
+As it has been explain during the progress of this document, the \textit{"Regular"} construction consists of the following steps:
+\begin{enumerate}
+	\item Loading intrinsic and extrinsic parameters.
+	\item Create projective matrix by using these parameters.
+	\item Taking picture of the current workspace.
+	\item Crop workspace image. 
+	\item Substract background.
+	\item Threshold (segmentation) and filter image.
+	\item Calculate edges and choose the "biggest" block.
+	\item Calculate the centroid and the angle, based on the slop of the block's side.
+	\item Translate the image coordinates of the chosen block to world and the robot coordinates.
+	\item Move the robot to the calculated position with its respective angle and pick the block.
+	\item Move the robot to the building board and drop the block.
+	\item Repeat steps 3-11 until the selected figure is finished. Note that the height of the position in the building board will be different depending on how many iterations have been carried out before.
+\end{enumerate}
+
+The "On the fly" construction differs a bit in some of the steps with the "Regular" one.
+For starters, this second form of building will only take \textbf{one} picture for figure. This results in a faster construction since taking a new picture and making the whole process to calculate new positions of the blocks every time takes quite a bit of time.
+However, this sort of process introduces a new problem to the table, since we are choosing the block that is going to be picked based on the maximum area and, in some cases, the same color will have to be picked twice.
+
+For this reason a "color counter" has been added during this method, keeping track of how many times a certain color has been picked and therefore calculating the position of the desired block as the relative maximum area with respect to the counter. I.e.: If one color has to be picked more than once, the block with the second biggest area would be picked the second time, the one with the third biggest area would be picked the third time, and so on. 
+
+On the other hand, even though the "On the fly" construction is significantly faster, it is also way less \textbf{robust}. This is due to the fact of taking only one picture for each figure construction. A compromise between speed and robustness should be achieved in a real scenario, since new blocks can be add to the workspace while a figure is being constructed or even considering the fact that the first (and only) picture is taken in the process might happen to be of not very good quality (blurred).

@@ -89,7 +89,7 @@ offset_rot = 12.28;
 
 % OTHER
 plotr = 1;
-onthefly = 1;
+onthefly = -1;
 
 %% USER INTERFACE
 % Program starting
@@ -102,7 +102,7 @@ fprintf('Choose one character from The Simpsons series.\n');
 fprintf('Input either the name of the character or its respective letter of the list:\n');
 prompt = 'A) Homer\nB) Marge\nC) Bart\nD) Lisa\nE) Maggie\n\nYour answer: ';
 
-allFigures = 'ABCDE';
+allFigures = 'A';
 
 for k = 1: length(allFigures)
     % usrIn = input(prompt,'s');
@@ -155,14 +155,14 @@ for k = 1: length(allFigures)
     end
     
     % NORMAL PROGRAM
-    fprintf('Taking picture of the current workspace...\n');
-    img_curr = snapshot(cam(1));
-    img_curr = undistortImage(img_curr,cameraParams);
-    imwrite(img_curr,'fig_calib/current.TIF');
+%     fprintf('Taking picture of the current workspace...\n');
+%     img_curr = snapshot(cam(1));
+%     img_curr = undistortImage(img_curr,cameraParams);
+%     imwrite(img_curr,'fig_calib/current.TIF');
     
     % USING FIGURE ALREADY TAKEN
-%     fprintf('Reading picture of the current workspace...\n');
-%     img_curr = imread('fig_calib/current.TIF');
+    fprintf('Reading picture of the current workspace...\n');
+    img_curr = imread('fig_calib/current.TIF');
     
     % Extrinsic and Intrinsic Matrices are used to change the coordinate
     % systems

@@ -10,7 +10,7 @@ As mentioned above, the camera calibration was also used to undistort the backgr
 
 
 \section{Intrinsic and Extrinsic Parameters}
-The parameters provided by the calibration of the camera can be used to make transformations between frames which is useful to calculate the correct position of the bricks. These parameters can be divided in two different groups: the intrinsic and the extrinsic. The intrinsic parameters are related to the camera (equation \ref{intrinsic}), for instances, the position of the principal point, the skew parameter (is zero because the axis are orthogonal) and the focal length. Using these parameters it is possible to combine the coordinates of the camera frame with the ones in the picture (pixels). The extrinsic parameters are the ones responsible for the relation between the world coordinates and the camera coordinates as is possible to see in \ref{extrinsic}.
+The parameters provided by the calibration of the camera can be used to make transformations between frames which is useful to calculate the correct position of the bricks. These parameters can be divided in two different groups: the intrinsic and the extrinsic. The intrinsic parameters are the features related to each specific camera (equation \ref{intrinsic}), for instance, the position of the principal point, the skew parameter (is zero because the axis are orthogonal) and the focal length. Using these parameters it is possible to combine the coordinates of the camera frame with the ones in the picture (pixels). The extrinsic parameters are the ones responsible for the relation between the world coordinates and the camera coordinates as is possible to see in \ref{extrinsic}.
 
 \begin{align} 
 \label{intrinsic}
@@ -60,7 +60,7 @@ The parameters provided by the calibration of the camera can be used to make tra
 \end{bmatrix}
 \end{align}
 
-Based on the relations between frames, it is possible to simplify the calculations associating the image coordinates with the world coordinates. The relation is made through a \textit{Projective matrix} ($3\times 4$ matrix) which is a result of the product between the intrinsic ($3\times 3$ matrix) and extrinsic ($3\times 4$ matrix) matrices.
+Based on the relations between frames, it is possible to simplify the calculations associating the image coordinates with the world coordinates. The relation is made through a \textit{Projective matrix}, \textit{P} ($3\times 4$ matrix) which is a result of the product between the intrinsic ($3\times 3$ matrix) and extrinsic ($3\times 4$ matrix) matrices.
 
 \begin{align} 
 \begin{bmatrix}
@@ -89,7 +89,7 @@ Based on the relations between frames, it is possible to simplify the calculatio
 \end{bmatrix}
 \end{align}
 
-The \textit{Projective matrix} is a $3\times 4$ matrix which means that it is not invertible. However, it is possible to assume that \textit{Z} is always zero because the blocks are in the \textit{XY} plane and thus the third column of the \textit{projective matrix} will be multiplied by zero. So, it is possible to ignore the third column of the \textit{projective matrix} and the third row of the matrix with the world coordinates.
+The \textit{P} matrix is a $3\times 4$ matrix, and therefore it is not invertible. However, it is possible to assume that \textit{Z} is always zero because the blocks are in the \textit{XY} plane and thus the third column of the \textit{projective matrix} will be multiplied by zero. So, it is possible to ignore the third column of the \textit{P} matrix and the third row of the matrix with the world coordinates.
 
 \begin{align} 
 \begin{bmatrix}

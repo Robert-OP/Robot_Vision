@@ -1,8 +1,10 @@
-\chapter{Hardware setup}\label{ch:hardware}
+\chapter{Setup and Methods}\label{ch:hardware}
+
+\section{Hardware}
 
 For the vision part a Logitech c920 HD Pro model camera has been used, as seen in Figure \ref{fig:cam}. The camera has Full HD which permits 1080p recordings. Moreover, its five-element glass lens with autofocus gives consistent high definition.
 
-In the case of the robot an Adept Cobra model has been used, as shown in Figure \ref{fig:cobra}. This robot has 4-axis with 3 rotational joints and one translational (z-axis) joint which permits the robot to move in a small area. The advantages of such robot are speed and precision. 
+In the case of the robot an Adept Cobra model has been used, as shown in Figure \ref{fig:cobra}. This robot has 4-axis with 3 rotational joints and one translational (z-axis) joint which operates fast and precise, at the expense of workspace area. 
 
 \begin{figure}[H]
 	\hfill
@@ -17,7 +19,6 @@ In the case of the robot an Adept Cobra model has been used, as shown in Figure 
 \end{figure}
 
 A personal computer has been used to connect with the camera and the robot. The camera was placed inside the robot cell, above the blocks, such that the images were taken from the top. This zenithal point of view allows to efficiently determine the positions and orientations of the blocks. 
-\\
 
 The physical connections to the computer were made through: 
 \begin{itemize}
@@ -33,6 +34,9 @@ The physical connections to the computer were made through:
 
 In order to connect between the different components described above, a local network was set up in which both the computer and the Adept Cobra controller were given a static IP. This computer runs the Adept Desktop program that was used to send the program code to the robot. This configuration allowed us to communicate with the robot and send MATLAB commands to it. MATLAB also includes a camera toolbox to work with it. 
 
+\section{Working principle}
+
+A thorough explanation of the system's working principle is presented in the following steps:   
 \begin{enumerate}
 	\item Loading intrinsic and extrinsic parameters.
 	\item Create projective matrix by using these parameters.

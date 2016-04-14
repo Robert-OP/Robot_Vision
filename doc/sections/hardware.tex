@@ -32,3 +32,18 @@ The physical connections to the computer were made through:
 \end{figure}
 
 In order to connect between the different components described above, a local network was set up in which both the computer and the Adept Cobra controller were given a static IP. This computer runs the Adept Desktop program that was used to send the program code to the robot. This configuration allowed us to communicate with the robot and send MATLAB commands to it. MATLAB also includes a camera toolbox to work with it. 
+
+\begin{enumerate}
+	\item Loading intrinsic and extrinsic parameters.
+	\item Create projective matrix by using these parameters.
+	\item Taking picture of the current workspace.
+	\item Crop workspace image. 
+	\item Substract background.
+	\item Threshold (segmentation) and filter image.
+	\item Calculate edges and choose the "biggest" block.
+	\item Calculate the centroid and the angle, based on the slop of the block's side.
+	\item Translate the image coordinates of the chosen block to world and the robot coordinates.
+	\item Move the robot to the calculated position with its respective angle and pick the block.
+	\item Move the robot to the building board and drop the block.
+	\item Repeat steps 3-11 until the selected figure is finished. Note that the height of the position in the building board will be different depending on how many iterations have been carried out before.
+\end{enumerate}

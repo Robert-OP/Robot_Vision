@@ -61,7 +61,7 @@ Thus, the color recognition was redefined taking into account the different ligh
 
 
 
-\begin{figure}[hb]
+\begin{figure}[H]
   \centering
   \includegraphics[scale=0.3]{figures/Thres_Y_good.png}
   \caption[LABEL] {Correct color thresholding}
@@ -78,7 +78,7 @@ An other solution would have been to set up a constant lighting inside the cell 
 
 	The detection of the edges was based on the resulting image of the color recognition. Below can be seen the color recognition of the blue blocks.
 
-	\begin{figure}[hb]
+	\begin{figure}[H]
   \centering
   \includegraphics[scale=0.3]{figures/color_rec_zoom.png}
   \caption[LABEL] {Post color recognition step}
@@ -114,9 +114,6 @@ The default value of the deviation is $\sqrt{2}$, increasing the deviation will 
 \caption{Canny edge detection method}
 
 \end{figure}
-
-
-
 
 As a result of the tests done, the Canny method with a standard deviation of 4 was the one chosen, giving us smoother lines but not too round corners in order to calculate its position.
 

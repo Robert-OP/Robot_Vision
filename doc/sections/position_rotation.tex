@@ -6,7 +6,14 @@ After detecting the edges of the bricks, it was possible to find the squared sha
 \section{Orientation}
 Besides the position, the measure of the required angle to turn the gripper is also essential to achieve the goal. Nevertheless, the coordinates of the center will be important to find the orientation of the bricks. 
 
-Using the image with the edges of only one block, the distance between each point and the center was calculated. Then, the points were ordered in a vector in order to find the coordinates of the four furthest points with respect to the center. However, in some situations a corner can be further from the center than the others, which means that more than one pixel would be selected in the same corner. To avoid this situation, the first pixel in the vector (the furthest one) will be surrounded by a forbidden area in order to choose only one pixel in each vertex.
+Using the image with the edges of only one block, the distance between each point and the center was calculated. Then, the points were ordered in a vector in order to find the coordinates of the four furthest points with respect to the center. However, in some situations a corner can be further from the center than the others, which means that more than one pixel would be selected in the same corner. To avoid this situation, the first pixel in the vector (the furthest one) will be surrounded by a forbidden area in order to choose only one pixel in each vertex (Figure \ref{fig:corner}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{figures/rotation6.png}
+\caption{Corner's forbidden area}
+\label{fig:corner}
+\end{figure}
 
 Then, two of the previous corners are chosen in order to define one side of the square. The connection between these two corners and the center generates two different straight lines (from each corner to the center). Using the same image it was evaluated which points were below the generated lines. To finish this step, a linear regression was calculated and the parameters of the straight line were found.
 

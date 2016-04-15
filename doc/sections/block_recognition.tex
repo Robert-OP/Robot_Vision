@@ -11,7 +11,7 @@ The block recognition part has been divided into 5 main steps:
 \end{itemize}
 
 \section{Background substraction}
-As a first step a background substraction was performed, such that the gray area around the blocks is neglected and a proper color detection is applied. Also, this deals with the uneven illumination in the images which results in smoother edges. 
+As the first step, a background substraction was performed, such that the gray area around the blocks is neglected and a proper color detection is applied. Also, this deals with the uneven illumination in the images which results in smoother edges. 
 
 This is done by substracting the 2D median filtered image from the initial one as in Equation \ref{eq:rem_alg}. In the case of the white block, the background substraction partially erases the block's shape. However, it will be reconstructed later in the edge detection stage. 
 
@@ -31,9 +31,9 @@ This is done by substracting the 2D median filtered image from the initial one a
 
 \section{Color detection}
 
- 	Once the background is substracted, the color of the blocks is experimentally obtained by using the tool \textit{Pixel region} in MATLAB. A color can be described with values between 0 and 255 for its primary colors, red, green and blue. Thus, for each block, the \textit{Pixel region} tool has been placed on it to get a range for the RGB parameters.\par
+ 	Once the background is substracted, the color of the blocks is experimentally obtained by using the tool \textit{'Pixel region'} in MATLAB. A color can be described with values between 0 and 255 for its primary colors, red, green and blue. Thus, for each block, the \textit{'Pixel region'} tool has been placed on it to get a range for the RGB parameters.\par
 
-An example with the yellow block is given below
+An example with the yellow block is given below:
 \par
 
 \begin{figure}[hb]
@@ -54,7 +54,7 @@ Figure \ref{fig:color1} gives us more or less a range for the RGB parameters. Th
 \end{figure}
   
 
-In figure \ref{fig:color2}, the 6 yellow blocks are detected. However, the one on the left is partially detected. This is the consequence of the different lightings in the robot cell. The RBG range was defined on a block placed in a zone of shadow (see the red arrow on the picture). \par
+In figure \ref{fig:color2}, the 6 yellow blocks are detected. However, the one on the left is partially detected. This is the consequence of the different lightings in the robot cell. The RGB range was defined on a block placed in a zone of shadow (see the red arrow on the picture). \par
 
 
 Thus, the color recognition was redefined taking into account the different lightings inside the robot cell. All the yellow blocks are now detected.
@@ -67,7 +67,7 @@ Thus, the color recognition was redefined taking into account the different ligh
   \caption[LABEL] {Correct color thresholding}
 \end{figure}
 
-An other solution would have been to set up a constant lighting inside the cell to have more precise ranges for the colors, resulting in a more robust system.
+Another solution would have been to set up a constant lighting inside the cell to have more precise ranges for the colors, resulting in a more robust system.
 
 
 
@@ -86,11 +86,11 @@ An other solution would have been to set up a constant lighting inside the cell 
 	
 
 
-As seen on the picture above, the shapes of the blocks that resulted from the color recognition step are irregular and so are be the edges. Thus, we used the Canny method that allows us to choose a stantard deviation of its filter in order to smooth the irregularities of the shapes.\par 
+Shown in the picture above, the shapes of the blocks that resulted from the color recognition step are irregular and so are the edges. Thus, the Canny method allows to choose a stantard deviation of its filter in order to smooth the irregularities of the shapes.\par 
 
 
 
-The default value of the deviation is $\sqrt{2}$, increasing the deviation will result in smoother lines until getting a round shape.
+The default value of the deviation is $\sqrt{2}$, and increasing it will result in smoother lines until getting a round shape.
 
 \begin{figure}[H]
 \hfill

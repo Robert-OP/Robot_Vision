@@ -1,12 +1,12 @@
 \section{Position}
-The goal of this project is to create Simpson characters by using bricks. Therefore, it is imperative to have a precise position of every block in order to give the correct coordinates to the gripper. Thus, the position becomes one of the most important steps in this project.
+The goal of this project is to create Simpson characters by using LEGO blocks. Therefore, it is imperative to have a precise position of every block in order to give the correct coordinates to the gripper. Thus, the position becomes one of the most important steps in this project.
 
-After detecting the edges of the bricks, it was possible to find the squared shapes of the blocks. These shapes were filled up, creating an homogeneous area that allows a better calculation of the center by using the \textit{Regionprops} function. This function calculates the coordinates of the center of mass which will be the center of the selected shape.
+After detecting the edges of the blocks, it was possible to find the square shapes of the blocks. These shapes were filled up, creating an homogeneous area that allowed a better calculation of the center by using the \textit{'Regionprops'} function. This function calculates the coordinates of the center of mass which will be the center of the selected shape.
 
 \section{Orientation}
-Besides the position, the measure of the required angle to turn the gripper is also essential to achieve the goal. Nevertheless, the coordinates of the center will be important to find the orientation of the bricks. 
+Besides the position, the correct angle to turn the gripper is essential in this application. Nevertheless, the coordinates of the center will be important to find the orientation of the blocks. 
 
-Using the image with the edges of only one block, the distance between each point and the center was calculated. Then, the points were ordered in a vector in order to find the coordinates of the four furthest points with respect to the center. However, in some situations a corner can be further from the center than the others, which means that more than one pixel would be selected in the same corner. To avoid this situation, the first pixel in the vector (the furthest one) will be surrounded by a forbidden area in order to choose only one pixel in each vertex (Figure \ref{fig:corner}).
+Using the image with the edges of only one block, the distance between each point and the center was calculated. Then, the points were sorted in a vector in order to find the coordinates of the four furthest points with respect to the center. However, in some situations a corner can be further from the center than the others, which means that more than one pixel would be selected in the same corner. To avoid this situation, the first pixel in the vector (the furthest one) will be surrounded by a forbidden area in order to choose only one pixel in each vertex (Figure \ref{fig:corner}).
 
 \begin{figure}[H]
 \centering
@@ -15,11 +15,11 @@ Using the image with the edges of only one block, the distance between each poin
 \label{fig:corner}
 \end{figure}
 
-Then, two of the previous corners are chosen in order to define one side of the square. The connection between these two corners and the center generates two different straight lines (from each corner to the center). Using the same image it was evaluated which points were below the generated lines. To finish this step, a linear regression was calculated and the parameters of the straight line were found.
+Then, two of the previous corners are chosen, such that they define one side of the square. The connection between these two corners and the center generates two different straight lines (from each corner to the center). Using the same image, it was evaluated which points were below the generated lines. To finish this step, a linear regression was calculated and the parameters of the straight line were found.
 
 \begin{figure}[H]
 \hfill
-\subfigure[Straight lines that connect the corners with the center of the brick]{
+\subfigure[Straight lines that connect the corners with the center of the block]{
 \includegraphics[scale=0.5]{figures/diag_square.png}
 \label{fig:subim11}}
 \hfill
@@ -27,10 +27,10 @@ Then, two of the previous corners are chosen in order to define one side of the 
 \includegraphics[scale=0.5]{figures/diag_square_side.png}
 \label{fig:subim12}}
 \hfill
-\caption{Brick in the world frame}
+\caption{Block in the world frame}
 \end{figure}
 
-Finally, the slope was converted to an angle to obtain the orientation of the brick. However, if the angle was negative it was necessary to calculate the one associated with the perpendicular line in order to have the correct orientation.
+Finally, the slope was converted to an angle to obtain the orientation of the block. However, if the angle was negative it was necessary to calculate the one associated with the perpendicular line in order to have the correct orientation.
 
 \begin{figure}[H]
 \hfill
@@ -43,6 +43,6 @@ Finally, the slope was converted to an angle to obtain the orientation of the br
 \includegraphics[scale=0.45]{figures/neg_slope.png}
 \label{fig:subim22}}
 \hfill
-\caption{Orientation of the brick in the robot frame}
+\caption{Orientation of the block in the robot frame}
 \label{fig:image2}
 \end{figure}

@@ -1,6 +1,6 @@
 \chapter{Results, Discussion and Conclusions}\label{ch:conclusion}
 
-When it comes to testing, two different approaches for building the figures have been addressed in the project. They will be refered throughout the text as \textit{"On the fly"} and \textit{"Regular"} construction.
+When it comes to testing, two different approaches for building the figures have been addressed in the project\footnote{https://github.com/Robert-OP/Robot\_Vision}. They will be refered throughout the text as \textit{"On the fly"}\footnote{https://www.youtube.com/watch?v=pPl5jek0adk} and \textit{"Regular"}\footnote{https://www.youtube.com/watch?v=YbVDMPjb6rQ} construction.
 
 The \textit{"Regular"} construction consists of the steps described in section \ref{sec:workiing_principle} and it is shown in the first video. 
 
@@ -15,9 +15,9 @@ We can conclude that a compromise between speed and robustness should be achieve
 \paragraph{} Regarding edge dectection, various methods were tested, being the Canny method the one which proved to give the more satisfactory results. 
 However, better results could be achieved by introducing an artificial lighting into our workspace, since this would solve the problem of variations in the threshold parameters, which sometimes lead to not accurate calculations of the block's coordinates.
 
-\paragraph{} A similar test was done to calculate the orientation of the blocks, testing methods that used the boundary boxes of the blocks, or even force brute comparison with a pool of different pictures. Fortunately, the final method chosen that compares the slope of the block's side, proved to be the best compromise between accuracy and computation.
+\paragraph{} A similar process was done to calculate the orientation of the blocks, testing methods that used the boundary boxes of the blocks, or even force brute comparison with a pool of different pictures. Fortunately, the final method chosen that compares the slope of the block's side proved to be the best compromise between accuracy and computation.
 
-\paragraph{} Using a undistorted image of our workspace significantly improved the precision of our position and orientation calculations. Nevertheless, due to not having a perfect undistortion and the thresholding issue mentioned before, the addition of some offets was in need to correct the small displacements of the gripper. 
+\paragraph{} Using an undistorted image of our workspace significantly improved the precision of the position and orientation calculations. Nevertheless, due to not having a perfect undistortion and the thresholding issue mentioned before, the addition of some offsets was in need to correct the small displacements of the gripper. 
 The process to choose these offsets was made by positioning the block in the center of the camera field of view and manually moving the robot to the correct location and orientation.
 
 \paragraph{} To sum up, understanding and applying the theoretical concepts presented in the lectures in this project, gave us an insight into the automation and robotic principles and how to combine them with the image processing neccesary to replicate a fairly realistic industrial scenario.

@@ -1,5 +1,5 @@
 \section{Frames}\label{ch:frames}
-A coordinate system is a reference framework that defines the position in either two- or three-dimensional space. In this chapter, the relationship between the coordinate system for the world and for the Cobra robot will be taken into account. In figure \ref{fig:sub-transformation}, it is shown that the world coordinate is rotated and translated with respect to the robot frame. 
+A coordinate system is a reference framework that defines the position in either two- or three-dimensional space. In this chapter, the relationship between the coordinate system of the world and of the Cobra robot will be taken into account. In figure \ref{fig:sub-transformation}, it is shown that the world coordinate is rotated and translated with respect to the robot frame. 
 %\begin{figure}[hb]
 %  \centering
 %  \includegraphics[width=3.5in]{figures/coordrobottoworld.png}
@@ -13,11 +13,11 @@ A coordinate system is a reference framework that defines the position in either
 \hfill
 \subfigure[Checkerboard]{\includegraphics[width=5cm]{figures/pattern.png}\label{fig:sub-checkerboard}}
 \hfill
-\caption{Title for both}
+\caption{Relation between frames}
 \end{figure}
 
 The following equation shows the relationship between the robot frame and the world frame. It is assumed that the z axis is on the same axis in both robot and world coordinate, because the blocks lay on the XY plane. Therefore the following equation can we written as: 
-\begin{align*}
+\begin{align}
 \begin{bmatrix}
 x_r \\
 y_r \\
@@ -46,7 +46,7 @@ y_w \\
 1 
 \end{bmatrix}
 \label{eq:world_to_robot}
-\end{align*}
+\end{align}
 
 
 In order to find the coordinates $(x_r,y_r,z_r)$ in the robot frame, the matrix [R | T] and the coordinates in the world frame $(x_w,y_w,z_w)$ must be known. However, in this situation, only  the coordinates in the world frame were known, as calculated in the former chapter by means of the \textit{P} matrix. So, in order to find the robot coordinates in equation \ref{eq:world_to_robot}, the matrix [R | T] needs to be calculated. An easy way to find the solution of this issue would be to solve the [R | T] matrix as a system of equations. So that, if one point is known in the robot frame and in the world one, we will have three equations with nine unknowns as described in equations \ref{eq:system_of_equations1} to \ref{eq:system_of_equations2}.
@@ -60,9 +60,10 @@ y_r &= d\cdot x_w + e\cdot x_w + f \\
 \end{align}
 As a consequence, two more points are required to find 6 more equations to complete the system. 
 
-The next step is to manually drive the robot to three different positions using the checkerboard as a reference, as shown in figure \ref{fig:sub-checkerboard}. The measured points are presented in the "REF TABLE" along with the final system of equations.
+The next step is to manually drive the robot to three different positions using the checkerboard as a reference, as shown in figure \ref{fig:sub-checkerboard}. The measured points are presented in the \ref{table:points} along with the final system of equations.
 
 \begin{table}[h]
+\centering
 \begin{tabular}{| c | c | c | c |}
 \hline
    & Point 1 & Point 2 & Point 3 \\
@@ -71,6 +72,8 @@ The next step is to manually drive the robot to three different positions using 
   Robot & [239.484\quad 198.714] & [233.953\quad 398.995]   & [408.578\quad 287.651] \\
   \hline
 \end{tabular}
+\caption{Points used to build the matrix}
+\label{table:points}
 \end{table}
 
 \begin{align*} 
@@ -84,8 +87,8 @@ p_3(x_r) &= a\cdot p_3(x_w) + b\cdot p_3(y_w) + c \\
 p_3(y_r) &= d\cdot p_3(x_w) + e\cdot p_3(y_w) + f \\
 1 &= g\cdot p_3(x_w) + h\cdot p_3(y_w) + k
 \end{align*}
-Finally, the relationship between the robot and world frame can be described by the following equation: 
-\begin{align*}
+Finally, the relation between the robot and world frame can be described by the following equation: 
+\begin{align}
 \begin{bmatrix}
 x_r \\
 y_r \\
@@ -101,5 +104,5 @@ x_w \\
 y_w \\
 1 
 \end{bmatrix}
-\end{align*}
+\end{align}
 
